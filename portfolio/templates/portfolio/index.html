@@ -10,21 +10,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-wzPASsOVdOjOymkxZD2FNC6DS3b9G1b2IOg2pcSSQhPKpwaMku4L1lRh3U9CCrNlAR4ViBMXBMa0OOH3McdCPA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        body {
-            padding: 10px;
-        }
-        .btn > .bi {
-            color: black;
-            background-color: black;
+
+        @keyframes fadeFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
+        .fade-from-top {
+            animation: fadeFromTop 0.9s ease-in-out;
+        }
         /* This is for my profile picture of the page */
         .profile {
-            width: 256px;
+            width: 700px;
             border: none;
-            border-radius: 50%;
             overflow: hidden;
             height: auto;
+        }
+
+        body {
+            padding: 10px;
+            transition: background-color 0.5s ease;
+            color: #eaeaea;
+            font-size: 16px;
+            line-height: 1.5;
+            font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+            background: #151515 url("{% static 'portfolio/images/bkg.png' %}") 0 0;  
         }
 
 
@@ -32,84 +48,447 @@
         /* This part is for the content area of the page */
         .content {
             display: none;
-        }
-
-        .fade-in {
             opacity: 0;
             transition: opacity 0.5s ease-in-out;
+            transform: translateY(-50px);
+        }
+        
+        
+        .content.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeFromTop 0.5s ease-in-out;
         }
 
-        .fade-in.active {
-            opacity: 1;
+
+        /* ##### This part is for the model styling ##### */
+        .modal-body p, .modal-title{
+            color: #b5e853;
+
         }
+
+        .btn-close {
+            background-color: #b5e853;
+            color: #eaeaea;
+        }
+        
+        .modal-content {
+            background-color: #1a1a1a;
+            border: 2px solid #b5e853;
+        }
+
+        .modal-header{
+            border: 2px solid #b5e853;
+        }
+        .modal-p{
+            color: #eaeaea;
+        }
+
+       h1, h2, h3 {
+        color: #b5e853;
+        letter-spacing: -0.03em;
+        text-shadow: 0 1px 1px rgba(0,0,0,0.1),0 0 5px rgba(181,232,83,0.1),0 0 10px rgba(181,232,83,0.1);
+        font-weight: normal;
+        font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+
+       }
+       a {
+        text-decoration: none;
+        color: #eaeaea;
+        text-shadow: 0 0 5px rgba(104,182,255,0.5);
+        font-size: 16px;
+        line-height: 1.5;
+        font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+        background: #151515 url("{% static 'portfolio/images/bkg.png' %}") 0 0;
+       }
+
+       .btn {
+        color: #b5e853;
+        background-color: transparent;
+        border: 2px solid #b5e853;
+
+       }
+
+       .btn:hover, .contact-btn:hover{
+        color: #eaeaea;
+        background-color: #1a1a1a;
+        border: 2px solid #eaeaea;
+       }
+
+
+       /* ##### Block na part ##### */
+       .card{
+            background-color: #1a1a1a;
+            color: #eaeaea;
+            border: 2px dashed #b5e853;
+       }
+
+       .blog-btn:hover{ 
+            border: 2px solid #b5e853;
+       }
+
+       .blog-btn, .card{
+            border: 2px dashed #b5e853;
+            margin-top: 30px;
+       }
+
+       
+       /* ##### For the blinking cursor na animation */
+    .blinking-cursor {
+        display: inline-block;
+        animation: blink-animation 1s infinite;
+        margin: 0;
+        padding: 0;
+    }
+
+    @keyframes blink-animation {
+      50% {
+        opacity: 0;
+      }
+    }
+
     </style>
 </head>
 <body>
-    <div class="container text-center">
-        <div class="row">
-            <div class="col">
-                <button type="button" class="btn btn-primary">Contact Me</button>
+    <div class="container">
+
+        <!-- Modal for Contact Information -->
+        <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="contactModalLabel">Contact Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Name: <span class="modal-p">Shawn Michael Sudaria</span></p>
+                        <p>Email: <span class="modal-p">shawnmichaelsudaria14@gmail.com</span></p>
+                        <p>Phone: <span class="modal-p">(+63) 9619381867</span></p>
+                    </div>
+                    <!-- You can customize the modal body with your actual contact information -->
+                </div>
             </div>
-            <div class="col">
-                <button><i class="fa-solid fa-sun"></i></button>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <img class="profile img-fluid" src="{% static 'portfolio/images/Profile.jpg' %}" alt="Picture of Shawn Michael Sudaria">
-            </div>
-        </div>
-        <br>
-        <br>
-        <br>
-        <div class="row">
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <button onclick="showContent('content1')" type="button" class="btn btn-secondary">About Me</button>
-                <button onclick="showContent('content2')" type="button" class="btn btn-secondary">Blog</button>
-                <button type="button" class="btn btn-secondary">Projects</button>
-            </div>
-        </div>
-        <br>
-        <br>
-        <br>
-        <!-- ##### The Different Contents ##### -->
-        <div id="content1" class="fade-in active content">
-            <h2>Section 1</h2>
-            <p>This is the initial content.</p>
         </div>
 
-        <div id="content2" class="fade-in content">
-            <h2>Section 2</h2>
-            <p>This is the content that will be displayed when you click the other button.</p>
+
+        <div class="row text-center">
+            <div class="col">
+                <button type="button" class="contact-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#contactModal">Contact Me</button>
+            </div>
+            <div class="col">
+                
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col">
+                <img class="profile img-fluid" src="{% static 'portfolio/images/Home.png' %}" alt="Picture of Shawn Michael Sudaria">
+            </div>
+        </div>
+        <br>
+        <div class="row text-center">
+            <div class="col"></div>
+            <div class="col">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button onclick="showContent('content1')" type="button" class="btn btn-secondary">About Me</button>
+                    <button onclick="showContent('content2')" type="button" class="btn btn-secondary">Blog</button>
+                    <button onclick="showContent('content3')" type="button" class="btn btn-secondary">Projects</button>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+        <br>
+        <br>
+        <br>
+
+        <!-- ##### The Different Contents ##### -->
+        <div id="content1" class="active content fade-from-top">
+            <h1 id="hi-i-m-shawn" class="text-center">Hi 👋🏼 I&#39;m Shawn</h1>
+            <h2 id="eastern-visayas-state-university-i-t-student" class="text-center">Eastern Visayas State University | I.T. Student</h2>
+            <p class="text-center"><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?color=&amp;lines=Novice+Security+Researcher;Software+Engineer;DFIR+Aspirant;Python+Developer;Network+Engineer;Information+Technology+Student;" alt="Typing SVG"></a></p>
+            <p class="text-justify">I am an <strong>Information Technology student</strong> in my second year at Eastern Visayas State University in Tacloban City. When I&#39;m not doing acads, I&#39;m learning and practicing i.t topics like <em>programming</em>, <em>networking engineering</em>, <em>databases</em>, <em>operating systems</em>, and so on. My research focus/areas of interest are in <em>Web Security</em>, <em>Network Security</em>, <em>Digial Forensics</em>, <em>Reverse Engineering</em>, and <em>Back-end Development</em></p>
+            <p class="text-justify">In addition, I participate in cybersecurity CTFs and exercises on platforms such as <a href="https://cyberdefenders.org/">Cyberdefenders</a>, <a href="https://blueteamlabs.online/">BlueTeamLabs.Online</a>, <a href="https://letsdefend.io/">LetsDefend</a>, and others. My profiles on said platforms can be found here: <a href="https://linktr.ee/m1cx">Profiles</a></p>
+            
+            <br><br><br>
+            
+            <h3 id="what-i-m-doing-currently" class="text-center">What I&#39;m doing currently</h3>
+            <p class="text-center">I&#39;m currently preparing for the Security+ and CCNA exams. After passing the aforementioned exams, I intend to take the CompTIA CySA+ and EC-Council Computer Hacking Forensic Investigator exams.</p>
+            
+            <br><br><br>
+
+            <h3 id="socials-" class="text-center">Socials 💬</h3>
+            <br>
+            <p class="text-center">
+                <div class="row lh-lg">
+                    <div class="col"></div>
+                    <div class="col">
+                         <div class="row">
+                            <div class="col">
+                                <a href="mailto:shawnmichaelsudaria14@proton.me" class="text-center"><img src="https://img.shields.io/badge/PROTONMAIL-shawnmichaelsudaria14%40proton.me-505264?style=for-the-badge&logo=protonmail&labelColor=505264" alt="ProtonMail" /></a><br>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <a href="https://twitter.com/_m1cx_" class="text-center"><img src="https://img.shields.io/badge/TWITTER-%40__m1cx__-1DA1F2?style=for-the-badge&logo=twitter&labelColor=1DA1F2&logoColor=white" alt="Twitter Handle"/></a><br>
+                            </div> 
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <a href="mailto:shawnmichaelsudaria14gmail.com" class="text-center"><img src="https://img.shields.io/badge/GMAIL-shawnmichaelsudaria14%40gmail.com-17cf91?style=for-the-badge&logo=Microsoft+outlook&labelColor=17cf91" alt="GMAIL"/></a><br>
+                            </div>
+                        
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <a href="https://www.linkedin.com/in/shawn-michael-sudaria/" class="text-center"><img src="https://img.shields.io/badge/LinkedIn-shawn%20michael%20sudaria-blue?style=for-the-badge&logo=linkedin&labelColor=blue" alt="LinkedIn"/></a><br>
+                            </div>
+                        
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <a href="https://www.instagram.com/shun_micx/" class="text-center"><img src="https://img.shields.io/badge/INSTAGRAM-%40__m1cx__-4c68d7?style=for-the-badge&logo=instagram&labelColor=4c68d7" /></a><br>
+                            </div>
+                        </div>
+                        </div>
+                    <div class="col"></div>
+                </div>
+               
+            </p>
+
+            <br><br><br>
+
+            <h3 id="tools-i-ve-used-" class="text-center">Tools I&#39;ve Used 🛠️</h3>
+            <br>
+            
+            <!-- Add Bootstrap grid classes for images -->
+            <div class="row text-center lh-lg">
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/html5-orange?style=for-the-badge&logo=html5&labelColor=orange&logoColor=white" class="img-fluid" alt="HTML5">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/css3-blue?style=for-the-badge&logo=css3&labelColor=blue&logoColor=white" class="img-fluid" alt="CSS3">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/Javascript-gray?style=for-the-badge&logo=javascript&labelColor=gray" class="img-fluid" alt="JavaScript">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/bootstrap-purple?style=for-the-badge&logo=bootstrap&labelColor=purple&logoColor=white" class="img-fluid" alt="Bootstrap">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/python-darkgreen?style=for-the-badge&logo=python&labelColor=darkgreen&logoColor=white" class="img-fluid" alt="Python">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/C/C++-gray?style=for-the-badge&logo=c&labelColor=gray&logoColor=white" class="img-fluid" alt="C/C++">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/vs code-0078d7?style=for-the-badge&logo=visual-studio-code&labelColor=0078d7" class="img-fluid" alt="VS Code">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/neovim-darkgreen?style=for-the-badge&logo=vim&labelColor=darkgreen" class="img-fluid" alt="Neovim">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/figma-pink?style=for-the-badge&logo=figma&labelColor=pink" class="img-fluid" alt="Figma">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/photoshop-darkblue?style=for-the-badge&logo=photoshop&labelColor=pink" class="img-fluid" alt="Photoshop">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/git-f77320?style=for-the-badge&logo=git&labelColor=f77320&logoColor=white" class="img-fluid" alt="Git">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/canva-34c2c7?style=for-the-badge&logo=canva&labelColor=34c2c7&logoColor=white" class="img-fluid" alt="Canva">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/wireshark-3762f0?style=for-the-badge&logo=wireshark&labelColor=3762f0" class="img-fluid" alt="Wireshark">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/volatility-f0183c?style=for-the-badge&logo=volatility&labelColor=f0183c" class="img-fluid" alt="Volatility">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/ftk imager-f0c518?style=for-the-badge&logo=ftk-imager&labelColor=f0c518" class="img-fluid" alt="FTK Imager">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/autopsy-f05218?style=for-the-badge&logo=autopsy&labelColor=f05218" class="img-fluid" alt="Autopsy">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/packet tracer-4287f5?style=for-the-badge&logo=packet-tracer&labelColor=4287f5" class="img-fluid" alt="Packet Tracer">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/linux-818285?style=for-the-badge&logo=linux&labelColor=818285&logoColor=ffea00" class="img-fluid" alt="Linux">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/VirtualBox-0451b5?style=for-the-badge&logo=virtualbox&labelColor=0451b5&logoColor=white" class="img-fluid" alt="VirtualBox">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/MySQL-0f8783?style=for-the-badge&logo=mysql&labelColor=0f8783&logoColor=white" class="img-fluid" alt="MySQL">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/Windows-00a1f1?style=for-the-badge&logo=windows&labelColor=00a1f1&logoColor=white" class="img-fluid" alt="Windows">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/Filmora-gray?style=for-the-badge&logo=filmora&labelColor=gray&logoColor=white" class="img-fluid" alt="Filmora">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/Network Miner-870f69?style=for-the-badge&logo=Networkminer&labelColor=870f69&logoColor=white" class="img-fluid" alt="Network Miner">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/Django-20751e?style=for-the-badge&logo=django&labelColor=20751e" class="img-fluid" alt="Django">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/flask-424242?style=for-the-badge&logo=flask&labelColor=424242" class="img-fluid" alt="Flask">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/PyQt-024a0b?style=for-the-badge&logo=qt&labelColor=024a0b" class="img-fluid" alt="PyQt">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/powershell-012456?style=for-the-badge&logo=powershell&labelColor=012456" class="img-fluid" alt="PowerShell">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/tmux-1e1f1e?style=for-the-badge&logo=tmux&labelColor=1e1f1e" class="img-fluid" alt="tmux">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/bash-6b6b6b?style=for-the-badge&logo=shell&labelColor=6b6b6b&logoColor=white" class="img-fluid" alt="Bash">
+                </div>
+                <div class="col-12 col-md-2">
+                    <img src="https://img.shields.io/badge/c-sharp-6b6b6b?style=for-the-badge&logo=shell&labelColor=6b6b6b&logoColor=white" class="img-fluid" alt="C#">
+                </div>
+            </div>
+            <br><br><br>
+            <h3 id="github-stats" class="text-center">Github Stats</h3>
+            <br> 
+            <p class="text-center">
+                <img src="https://github-readme-stats.vercel.app/api?username=0xM1cx&amp;show_icons=true&amp;theme=tokyonight" alt="Anurag&#39;s GitHub stats">
+                
+                <a href="https://github.com/anuraghazra/github-readme-stats"><img src="https://github-readme-stats.vercel.app/api/top-langs/?username=0xM1cx&amp;layout=compact" alt="Top Langs"></a>
+            </p>
+            <p class="text-center"> <img src="https://profile-counter.glitch.me/{0xM1cx}/count.svg" alt="Visitor Count"></p>
+
+        </div>
+
+
+        <!-- ##### Para ine ha blog na part -->
+        <div id="content2" class="content fade-from-top">
+            <h2>Blogs<div id="blinkingCursor" class="blinking-cursor">█</div></h2>
+            <div class="row">
+                <div class="col-sm-6">
+                        <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">$t3go</h3>
+                            <p class="card-text">
+                                This is a Steganography challnege on the PicoCTF platform. In This
+                                challenge you are given a <code>.png</code> file that holds a flag.
+                            </p>
+                            <a href="https://medium.com/@m1cx/t3go-a159ba5dac1" target="_blank" class="blog-btn btn btn-primary">Go somewhere</a>
+                        </div>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                        <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Basic-file-exploit</h3>
+                            <p class="card-text">
+                                The program provided allows you to write to a file and read what you wrote from it. Try playing around with it and see if you can break it!
+                                Connect to the program with netcat: $ nc saturn.picoctf.net 52681
+
+                                The programs source code with the flag redacted can be downloaded <code>[here](https://artifacts.picoctf.net/c/543/program-redacted.c)</code>.
+                            </p>
+                            <a href="https://medium.com/@m1cx/basic-file-exploit-6933c1265b2d" target="_blank" class="blog-btn btn btn-primary">Go somewhere</a>
+                        </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="content fade-from-top" id="content3">
+            <h2>Github Projects<div id="blinkingCursor" class="blinking-cursor">█</div></h2>
+            <div class="row">
+                <div class="col-sm-6">
+                        <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Network Scanner</h3>
+                            <p class="card-text">
+                                A network scanner project. The idea was from cybercademy.org. 
+                            </p>
+                            <a href="https://github.com/0xM1cx/Basic_Network_Scanner" target="_blank" class="blog-btn btn btn-primary">Go somewhere</a>
+                        </div>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                        <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Cryptography GUI</h3>
+                            <p class="card-text">
+                                This is a Graphical User Interface where users can encrypt plain text to their desired encryption algorithm and also decrypt cipher text. 
+                            </p>
+                            <a href="https://github.com/0xM1cx/Crypto-Algo-GUI" target="_blank" class="blog-btn btn btn-primary">Go somewhere</a>
+                        </div>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                        <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">CPU Scheduling Algorithm</h3>
+                            <p class="card-text">
+                                This is a Python-based simulator for CPU scheduling algorithms, featuring Non-Preemptive Priority 
+                                Scheduling and Preemptive Priority Scheduling. The simulator generates random processes with arrival 
+                                times, burst times, and priority levels, executes the scheduling algorithms, and visualizes the results 
+                                using Gantt charts.  
+                            </p>
+                            <a href="https://github.com/0xM1cx/CPU_Priority_Scheduling-Algorithm" target="_blank" class="blog-btn btn btn-primary">Go somewhere</a>
+                        </div>
+                        </div>
+                </div>
+                <div class="col-sm-6">
+                        <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">EVSU Entrance Exam Passers Automated Statistics</h3>
+                            <p class="card-text">
+                                This contains an python automation program that automatically downloads all the links of the pdf of EVSU 
+                                2021-2022 first year qualifiers. This program also extracts the tables inside the pdf files and converts 
+                                them to csv files. Lastly, this program get statistics on the number of passes for each course, campus or both. 
+                            </p>
+                            <a href="https://github.com/0xM1cx/EVSU_BSIT_PASSERS_STAT" target="_blank" class="blog-btn btn btn-primary">Go somewhere</a>
+                        </div>
+                        </div>
+                </div>
+            </div>
         </div>
     </div>
-    
 
     <script>
+
+        setInterval(function() {
+            var blinkingCursor = document.getElementById('blinkingCursor');
+            blinkingCursor.style.display = (blinkingCursor.style.display === 'none' ? '' : 'none');
+            }, 500);        
+
+        var currentScrollPosition = 0;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            showContent('content1');
+            currentScrollPosition = window.scrollY; // Store the current scroll position
+        });
+
         function showContent(contentId) {
-        // Hide all content divs
-        var contents = document.getElementsByClassName('content');
-        for (var i = 0; i < contents.length; i++) {
-            contents[i].style.display = 'none';
+            // Store the current scroll position before hiding the content
+            var currentContent = document.querySelector('.content.active');
+            if (currentContent) {
+                currentScrollPosition = currentContent.scrollTop;
+            }
+
+            // Hide all content divs
+            var contents = document.getElementsByClassName('content');
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+
+            // Show the selected content with a fade animation
+            var selectedContent = document.getElementById(contentId);
+            selectedContent.classList.add('active');
+
+            // Set the scroll position for the new content
+            selectedContent.scrollTop = currentScrollPosition;
         }
 
-        // Show the selected content with a fade animation
-        var selectedContent = document.getElementById(contentId);
-        selectedContent.style.display = 'block';
-        fadeIn(selectedContent);
-    }
-
-    function fadeIn(element) {
-        var opacity = 0;
-        var intervalId = setInterval(function () {
-            if (opacity < 1) {
-                opacity += 0.1;
-                element.style.opacity = opacity;
-            } else {
-                clearInterval(intervalId);
-            }
-        }, 100);
-    }
     </script>
 </body>
 </html>
