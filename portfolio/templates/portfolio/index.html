@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,11 +9,38 @@
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.18.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-wzPASsOVdOjOymkxZD2FNC6DS3b9G1b2IOg2pcSSQhPKpwaMku4L1lRh3U9CCrNlAR4ViBMXBMa0OOH3McdCPA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
     <style>
+        body {
+            padding: 10px;
+        }
         .btn > .bi {
             color: black;
             background-color: black;
+        }
+
+        /* This is for my profile picture of the page */
+        .profile {
+            width: 256px;
+            border: none;
+            border-radius: 50%;
+            overflow: hidden;
+            height: auto;
+        }
+
+
+
+        /* This part is for the content area of the page */
+        .content {
+            display: none;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .fade-in.active {
+            opacity: 1;
         }
     </style>
 </head>
@@ -26,6 +54,62 @@
                 <button><i class="fa-solid fa-sun"></i></button>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <img class="profile img-fluid" src="{% static 'portfolio/images/Profile.jpg' %}" alt="Picture of Shawn Michael Sudaria">
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="row">
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button onclick="showContent('content1')" type="button" class="btn btn-secondary">About Me</button>
+                <button onclick="showContent('content2')" type="button" class="btn btn-secondary">Blog</button>
+                <button type="button" class="btn btn-secondary">Projects</button>
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <!-- ##### The Different Contents ##### -->
+        <div id="content1" class="fade-in active content">
+            <h2>Section 1</h2>
+            <p>This is the initial content.</p>
+        </div>
+
+        <div id="content2" class="fade-in content">
+            <h2>Section 2</h2>
+            <p>This is the content that will be displayed when you click the other button.</p>
+        </div>
     </div>
+    
+
+    <script>
+        function showContent(contentId) {
+        // Hide all content divs
+        var contents = document.getElementsByClassName('content');
+        for (var i = 0; i < contents.length; i++) {
+            contents[i].style.display = 'none';
+        }
+
+        // Show the selected content with a fade animation
+        var selectedContent = document.getElementById(contentId);
+        selectedContent.style.display = 'block';
+        fadeIn(selectedContent);
+    }
+
+    function fadeIn(element) {
+        var opacity = 0;
+        var intervalId = setInterval(function () {
+            if (opacity < 1) {
+                opacity += 0.1;
+                element.style.opacity = opacity;
+            } else {
+                clearInterval(intervalId);
+            }
+        }, 100);
+    }
+    </script>
 </body>
 </html>
