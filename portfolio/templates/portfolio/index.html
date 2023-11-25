@@ -15,7 +15,7 @@
             from {
                 opacity: 0;
                 transform: translateY(-50px);
-            }
+            }   
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -203,19 +203,14 @@
 
         <!-- ##### The Different Contents ##### -->
         <div id="content1" class="active content fade-from-top">
-            <h1 id="hi-i-m-shawn" class="text-center">Hi 👋🏼 I&#39;m Shawn</h1>
-            <h2 id="eastern-visayas-state-university-i-t-student" class="text-center">Eastern Visayas State University | I.T. Student</h2>
+            <h1 id="hi-i-m-shawn" class="text-center">Hi 👋🏼 I&#39;m Shun</h1>
             <p class="text-center"><a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.herokuapp.com?color=&amp;lines=Novice+Security+Researcher;Software+Engineer;DFIR+Aspirant;Python+Developer;Network+Engineer;Information+Technology+Student;" alt="Typing SVG"></a></p>
             <p class="text-justify">I am an <strong>Information Technology student</strong> in my second year at Eastern Visayas State University in Tacloban City. When I&#39;m not doing acads, I&#39;m learning and practicing i.t topics like <em>programming</em>, <em>networking engineering</em>, <em>databases</em>, <em>operating systems</em>, and so on. My research focus/areas of interest are in <em>Web Security</em>, <em>Network Security</em>, <em>Digial Forensics</em>, <em>Reverse Engineering</em>, and <em>Back-end Development</em></p>
             <p class="text-justify">In addition, I participate in cybersecurity CTFs and exercises on platforms such as <a href="https://cyberdefenders.org/">Cyberdefenders</a>, <a href="https://blueteamlabs.online/">BlueTeamLabs.Online</a>, <a href="https://letsdefend.io/">LetsDefend</a>, and others. My profiles on said platforms can be found here: <a href="https://linktr.ee/m1cx">Profiles</a></p>
-            
             <br><br><br>
-            
             <h3 id="what-i-m-doing-currently" class="text-center">What I&#39;m doing currently</h3>
             <p class="text-center">I&#39;m currently preparing for the Security+ and CCNA exams. After passing the aforementioned exams, I intend to take the CompTIA CySA+ and EC-Council Computer Hacking Forensic Investigator exams.</p>
-            
             <br><br><br>
-
             <h3 id="socials-" class="text-center">Socials 💬</h3>
             <br>
             <p class="text-center">
@@ -368,7 +363,14 @@
 
         <!-- ##### Para ine ha blog na part -->
         <div id="content2" class="content fade-from-top">
-            <h2>Blogs<div id="blinkingCursor" class="blinking-cursor">█</div></h2>
+            <div class="row">
+                <div class="col">
+                    <h2>Blogs<div id="blinkingCursor" class="blinking-cursor">█</div></h2>
+                </div>
+                <!-- <div class="col d-flex justify-content-end">
+                    <button class="btn" data-toggle="modal" data-target="#addProjectModal">Add Blog</button>
+                </div> -->
+            </div>
             <div class="row">
                 <div class="col-sm-6">
                         <div class="card">
@@ -399,7 +401,14 @@
             </div>
         </div>
         <div class="content fade-from-top" id="content3">
-            <h2>Github Projects<div id="blinkingCursor" class="blinking-cursor">█</div></h2>
+            <div class="row">
+                <div class="col">
+                    <h2>Github Projects<div id="blinkingCursor" class="blinking-cursor">█</div></h2>
+                </div>
+                <!-- <div class="col d-flex justify-content-end">
+                    <button class="btn">Add Project</button>
+                </div> -->
+            </div>
             <div class="row">
                 <div class="col-sm-6">
                         <div class="card">
@@ -450,8 +459,39 @@
                         </div>
                         </div>
                 </div>
+                <div class="modal" id="addProjectModal" tabindex="-1" role="dialog" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form to input new project details -->
+                                <form id="projectForm">
+                                    <div class="form-group">
+                                        <label for="projectTitle">Title:</label>
+                                        <input type="text" class="form-control" id="projectTitle" name="title" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="projectDescription">Description:</label>
+                                        <textarea class="form-control" id="projectDescription" name="description" rows="3" required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="projectLink">Link:</label>
+                                        <input type="url" class="form-control" id="projectLink" name="link" required>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="addProject()">Add Project</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     </div>
 
     <script>
@@ -489,6 +529,33 @@
             selectedContent.scrollTop = currentScrollPosition;
         }
 
+
+        function addProject() {
+            // Get form data
+            var title = $("#projectTitle").val();
+            var description = $("#projectDescription").val();
+            var link = $("#projectLink").val();
+
+            // Create card HTML
+            var cardHtml = `
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">${title}</h3>
+                            <p class="card-text">${description}</p>
+                            <a href="${link}" target="_blank" class="blog-btn btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Append card to the existing projects
+            $(".row").append(cardHtml);
+
+            // Reset form and close modal
+            $("#projectForm")[0].reset();
+            $("#addProjectModal").modal("hide");
+        }
     </script>
 </body>
 </html>
