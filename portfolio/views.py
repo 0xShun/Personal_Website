@@ -10,3 +10,9 @@ def blog(request):
 
 def projects(request):
     return HttpResponse("Github Projects Here")
+
+
+
+
+
+
