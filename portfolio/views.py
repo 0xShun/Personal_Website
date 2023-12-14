@@ -38,15 +38,9 @@ def projects(request):
 
 
 
-<<<<<<< HEAD
 # Para han part na mag add hin new cards ha blog na tab
 
 def addSecBlog(request):
     return render(request, "portfolio/SecurityBlog.html", {
         "form": NewBlogs()
     })
-=======
-
-
-
->>>>>>> a67b3df31371e98bc81de7490530bfa3c2deb9b5
