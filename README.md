@@ -7,11 +7,8 @@
 
 ### Prerequisites
 
-List the software and dependencies needed to run the project.
-
 - Python 3.7+
 - Django 3.2+
-- ...
 
 ### Installation
 
