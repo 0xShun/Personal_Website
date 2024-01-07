@@ -4,7 +4,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Django Version](https://img.shields.io/badge/Django-3.2-green.svg)](https://www.djangoproject.com/)
 
-
+Author: SHAWN MICHAEL SUDARIA | BSIT 2B
+Course Instructor: JOLECO AGULLO
 ### Prerequisites
 
 - Python 3.7+
