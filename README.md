@@ -1,19 +1,8 @@
-# Project Title
+# Personal Website | WebSystem 1 Final Project
 
 [![Build Status](https://travis-ci.org/your-username/your-repo.svg?branch=main)](https://travis-ci.org/your-username/your-repo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Django Version](https://img.shields.io/badge/Django-3.2-green.svg)](https://www.djangoproject.com/)
-
-Short description of your project goes here.
-
-## Table of Contents
-
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
 
 
 ### Prerequisites
