@@ -1,4 +1,4 @@
-# Personal Websit
+# Personal Website
 
 [![Build Status](https://travis-ci.org/your-username/your-repo.svg?branch=main)](https://travis-ci.org/your-username/your-repo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
