@@ -19,6 +19,7 @@
         .navbar {
             padding: 1rem;
             border-bottom: 1px solid black;
+            z-index: 1030;
         }
 
         .nav-item:hover {
@@ -34,7 +35,6 @@
             margin: 0 1rem;
             font-size: 20px;
             color: rgb(2, 201, 201);
-            
         }
 
         .theme-toggle {
@@ -44,7 +44,36 @@
         }
 
         body {
-            padding-top: 60px;
+            padding-top: 80px; /* Increased padding to ensure content is below navbar */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        main {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .dark-mode * {
+            color: white !important;
+        }
+
+        .dark-mode .navbar {
+            border-bottom: 1px solid white;
+        }
+
+        .dark-mode .nav-item:hover {
+            border: 1px solid white;
         }
     </style>
 </head>
@@ -94,7 +123,6 @@
         function toggleTheme() {
             const body = document.body;
             const icon = document.getElementById('theme-icon');
-            const nav = document.getElementsByClassName('nav-link');
             
             if (body.classList.contains('dark-mode')) {
                 body.classList.remove('dark-mode');
@@ -102,12 +130,10 @@
                 body.classList.remove('text-white');
                 icon.classList.remove('bi-moon-fill');
                 icon.classList.add('bi-sun-fill');
-                nav.add('text-white');
             } else {
                 body.classList.add('dark-mode');
                 body.classList.add('bg-dark');
                 body.classList.add('text-white');
-                
                 icon.classList.remove('bi-sun-fill');
                 icon.classList.add('bi-moon-fill');
             }
