@@ -18,10 +18,9 @@
         
         .navbar {
             padding: 1rem;
-            border-bottom: 1px solid black;
+            /* border-bottom: 1px solid black; */
             z-index: 1030;
         }
-
 
         .nav-link {
             margin: 0 1rem;
@@ -31,7 +30,7 @@
         .nav-link:hover {
             margin: 0 1rem;
             font-size: 20px;
-            color: rgb(2, 201, 201);
+            color: rgb(2, 201, 201) !important;
         }
 
         .theme-toggle {
@@ -61,7 +60,28 @@
             width: 100%;
         }
 
-        .dark-mode * {
+        .dark-mode,
+        .dark-mode div,
+        .dark-mode p,
+        .dark-mode span,
+        .dark-mode h1,
+        .dark-mode h2,
+        .dark-mode h3,
+        .dark-mode h4,
+        .dark-mode h5,
+        .dark-mode h6,
+        .dark-mode a,
+        .dark-mode label,
+        .dark-mode input,
+        .dark-mode textarea,
+        .dark-mode .nav-link,
+        .dark-mode .navbar-nav,
+        .dark-mode .navbar-light .navbar-nav .nav-link,
+        .dark-mode .form-control,
+        .dark-mode .card,
+        .dark-mode .card-header,
+        .dark-mode .card-body,
+        .dark-mode .btn {
             color: white !important;
         }
 
@@ -70,12 +90,26 @@
         }
 
         .dark-mode .navbar {
-            border-bottom: 1px solid white;
+            /* border-bottom: 1px solid white; */
             background-color: #1a1a1a !important;
         }
 
         .dark-mode .nav-item:hover {
-            border: 1px solid white;
+            border: none;
+        }
+
+        .dark-mode .card {
+            background-color: #2d2d2d !important;
+        }
+
+        .dark-mode .form-control {
+            background-color: #333 !important;
+            border-color: #444 !important;
+        }
+
+        .dark-mode .btn {
+            background-color: #444 !important;
+            border-color: #555 !important;
         }
     </style>
 </head>

@@ -1,5 +1,83 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    .custom-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px); 
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      margin-bottom: 20px; 
+    }
+    .icon {
+      font-size: 30px;
+      background-color: rgba(56, 56, 86, 0.7); 
+      border-radius: 50%;
+      padding: 10px;
+      display: inline-block;
+    }
+</style>
+<div class="container py-5">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="custom-card">
+        <h5>Profile Overview</h5>
+        <p>Hey, I'm Jason! I'm a frontend dev and cybersecurity CTF player...</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="custom-card text-center">
+        <div class="icon">🏁</div>
+        <p>Achievements</p>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="custom-card text-center">
+        <div class="icon">⚙️</div>
+        <p>Settings</p>
+      </div>
+    </div>
+  </div>
 
+  <div class="row mt-3">
+    <div class="col-md-4">
+      <div class="custom-card text-center">
+        <img src="japan.png" class="img-fluid rounded" alt="Japan">
+        <p>A Retrospective on Japan</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="custom-card">
+        <h5>Statistics</h5>
+        <p>Heatmap and other cool data.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="custom-card">
+        <h5>Last Played</h5>
+        <p>Music stats</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-6">
+      <div class="custom-card">
+        <h5>Contribution Heatmap</h5>
+        <p>Data for the last few months</p>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="custom-card">
+        <h5>Activity Stats</h5>
+        <ul>
+          <li>GitHub: 521h</li>
+          <li>Twitter: 427h</li>
+          <li>Others...</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

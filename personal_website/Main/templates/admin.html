@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Articles Upload Section -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Upload Article</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="article_file" class="form-label">Markdown File</label>
+                            <input type="file" class="form-control" id="article_file" name="article_file" accept=".md" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload Article</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Upload Section -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Add Project</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="project_title" class="form-label">Project Title</label>
+                            <input type="text" class="form-control" id="project_title" name="project_title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="project_cover" class="form-label">Cover Photo</label>
+                            <input type="file" class="form-control" id="project_cover" name="project_cover" accept="image/*" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="project_description" class="form-label">Description</label>
+                            <textarea class="form-control" id="project_description" name="project_description" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="github_link" class="form-label">GitHub Link</label>
+                            <input type="url" class="form-control" id="github_link" name="github_link" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="project_tags" class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-control" id="project_tags" name="project_tags" placeholder="python, django, web">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Project</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Upload Section -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Upload Research</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="research_file" class="form-label">Markdown File</label>
+                            <input type="file" class="form-control" id="research_file" name="research_file" accept=".md" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload Research</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
