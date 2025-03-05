@@ -14,8 +14,8 @@
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repo.git
-   cd your-repo
+   git clone https://github.com/0xShun/Personal_Website.git
+   cd Personal_Website
 2. install dependencies
    ```bash
     pip install -r requirements.txt
