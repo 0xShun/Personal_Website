@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,13 +18,14 @@
         
         .navbar {
             padding: 1rem;
-            /* border-bottom: 1px solid black; */
+            color: #fff !important;
             z-index: 1030;
         }
 
         .nav-link {
             margin: 0 1rem;
             font-size: 20px;
+            color: #fff; /* Changed to white */
         }
 
         .nav-link:hover {
@@ -33,18 +34,14 @@
             color: rgb(2, 201, 201) !important;
         }
 
-        .theme-toggle {
-            border: none;
-            background: transparent;
-            padding: 0.5rem;
-        }
-
         body {
             padding-top: 90px; 
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
+            background-color: #000; /* Darker dark mode background color */
+            color: #fff; /* Dark mode text color */
         }
 
         main {
@@ -59,66 +56,14 @@
             text-align: center;
             width: 100%;
         }
-
-        .dark-mode,
-        .dark-mode div,
-        .dark-mode p,
-        .dark-mode span,
-        .dark-mode h1,
-        .dark-mode h2,
-        .dark-mode h3,
-        .dark-mode h4,
-        .dark-mode h5,
-        .dark-mode h6,
-        .dark-mode a,
-        .dark-mode label,
-        .dark-mode input,
-        .dark-mode textarea,
-        .dark-mode .nav-link,
-        .dark-mode .navbar-nav,
-        .dark-mode .navbar-light .navbar-nav .nav-link,
-        .dark-mode .form-control,
-        .dark-mode .card,
-        .dark-mode .card-header,
-        .dark-mode .card-body,
-        .dark-mode .btn {
-            color: white !important;
-        }
-
-        .dark-mode {
-            background-color: #1a1a1a !important;
-        }
-
-        .dark-mode .navbar {
-            /* border-bottom: 1px solid white; */
-            background-color: #1a1a1a !important;
-        }
-
-        .dark-mode .nav-item:hover {
-            border: none;
-        }
-
-        .dark-mode .card {
-            background-color: #2d2d2d !important;
-        }
-
-        .dark-mode .form-control {
-            background-color: #333 !important;
-            border-color: #444 !important;
-        }
-
-        .dark-mode .btn {
-            background-color: #444 !important;
-            border-color: #555 !important;
-        }
     </style>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container-fluid">
-                <button class="theme-toggle" onclick="toggleTheme()">
-                    <i class="bi bi-sun-fill" id="theme-icon" style="font-size: 1.5rem;"></i>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon" style="color: white;"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul class="navbar-nav">
@@ -151,28 +96,68 @@
     <footer>
         <p>&copy; {% now "Y" %} Shawn Michael Sudaria. All rights reserved.</p>
     </footer>
-
-    <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
-    <script>
-        function toggleTheme() {
-            const body = document.body;
-            const icon = document.getElementById('theme-icon');
-            
-            if (body.classList.contains('dark-mode')) {
-                body.classList.remove('dark-mode');
-                body.classList.remove('bg-dark');
-                body.classList.remove('text-white');
-                icon.classList.remove('bi-moon-fill');
-                icon.classList.add('bi-sun-fill');
-            } else {
-                body.classList.add('dark-mode');
-                body.classList.add('text-white');
-                icon.classList.remove('bi-sun-fill');
-                icon.classList.add('bi-moon-fill');
-            }
+    <!-- <script src="{% static 'js/main.js' %}"></script> -->
+</body>
+</html>
+            position: relative;
+            background-color: #000; /* Darker dark mode background color */
+            color: #fff; /* Dark mode text color */
         }
-    </script>
+
+        main {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon" style="color: white;"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'articles' %}">Articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'projects' %}">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'research' %}">Research</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; {% now "Y" %} Shawn Michael Sudaria. All rights reserved.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="{% static 'js/main.js' %}"></script> -->
 </body>
 </html>
