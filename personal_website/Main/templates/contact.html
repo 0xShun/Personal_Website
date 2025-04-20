@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Contact | Shawn Michael Sudaria{% endblock %}
 
@@ -22,22 +23,30 @@
             <div class="col-md-6">
                 <div class="notion-card">
                     <h2 class="mb-4 text-center">Contact Me</h2>
-                    <form class="contact-form">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} mb-4">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <form method="post" class="contact-form">
+                        {% csrf_token %}
                         <div class="mb-4">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control notion-input" id="name" required>
+                            <input type="text" class="form-control notion-input" id="name" name="name" required>
                         </div>
                         <div class="mb-4">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control notion-input" id="email" required>
+                            <input type="email" class="form-control notion-input" id="email" name="email" required>
                         </div>
                         <div class="mb-4">
                             <label for="subject" class="form-label">Subject</label>
-                            <input type="text" class="form-control notion-input" id="subject" required>
+                            <input type="text" class="form-control notion-input" id="subject" name="subject" required>
                         </div>
                         <div class="mb-4">
                             <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control notion-input" id="message" rows="5" required></textarea>
+                            <textarea class="form-control notion-input" id="message" name="message" rows="5" required></textarea>
                         </div>
                         <button type="submit" class="notion-button" style="background-color: var(--accent-primary); color: white; width: 100%;">
                             <i class="ri-send-plane-line me-2"></i>Send Message
@@ -51,19 +60,19 @@
                 <div class="notion-card">
                     <h2 class="mb-4 text-center">Connect With Me</h2>
                     <div class="d-flex flex-column gap-4">
-                        <a href="https://github.com/0xShun" class="notion-link">
+                        <a href="https://github.com/0xShun" class="notion-link" target="_blank" rel="noopener noreferrer">
                             <i class="ri-github-line me-2"></i>
                             <span>GitHub</span>
                         </a>
-                        <a href="https://www.linkedin.com/in/shawn-michael-sudaria-397a33319/" class="notion-link">
+                        <a href="https://www.linkedin.com/in/shawn-michael-sudaria-397a33319/" class="notion-link" target="_blank" rel="noopener noreferrer">
                             <i class="ri-linkedin-line me-2"></i>
                             <span>LinkedIn</span>
                         </a>
-                        <a href="https://www.instagram.com/shone_ayo/" class="notion-link">
+                        <a href="https://www.instagram.com/shone_ayo/" class="notion-link" target="_blank" rel="noopener noreferrer">
                             <i class="ri-instagram-line me-2"></i>
                             <span>Instagram</span>
                         </a>
-                        <a href="https://www.facebook.com/Sudaria.Shawn" class="notion-link">
+                        <a href="https://www.facebook.com/Sudaria.Shawn" class="notion-link" target="_blank" rel="noopener noreferrer">
                             <i class="ri-facebook-line me-2"></i>
                             <span>Facebook</span>
                         </a>

@@ -26,29 +26,6 @@
     </div>
 
     {% if articles %}
-        <!-- Featured Article -->
-        {% with featured_article=articles.first %}
-        <div class="notion-block">
-            <h2>Featured Article</h2>
-            <div class="notion-card featured">
-                <div class="notion-card-icon">⭐</div>
-                <span class="notion-tag featured-tag">Featured</span>
-                <h3>{{ featured_article.title }}</h3>
-                <p>{{ featured_article.content_html|truncatewords_html:30|safe }}</p>
-                <div class="notion-metadata">
-                    <span><i class="ri-calendar-line"></i> {{ featured_article.created_at|date:"F j, Y" }}</span>
-                    <span class="notion-tag">{{ featured_article.get_category_display }}</span>
-                </div>
-                <div class="notion-buttons">
-                    <a href="{% url 'article_detail' featured_article.slug %}" class="notion-button">
-                        <i class="ri-article-line"></i>
-                        <span>Read Article</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        {% endwith %}
-
         <!-- Article Grid -->
         <div class="notion-block">
             <h2>Latest Articles</h2>
@@ -85,24 +62,6 @@
             </div>
         </div>
     {% endif %}
-
-    <!-- Newsletter Signup -->
-    <div class="notion-block">
-        <h2>Stay Updated</h2>
-        <div class="notion-callout">
-            <div class="notion-callout-icon">📮</div>
-            <div class="notion-callout-content">
-                <p>Subscribe to my newsletter for the latest articles and updates.</p>
-                <form class="notion-form">
-                    <input type="email" class="notion-input" placeholder="Enter your email">
-                    <button type="submit" class="notion-button">
-                        <i class="ri-mail-send-line"></i>
-                        <span>Subscribe</span>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- Article Filter JavaScript -->

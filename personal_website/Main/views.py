@@ -11,6 +11,7 @@ import os
 from django.conf import settings
 import logging
 from django.urls import reverse
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
@@ -37,10 +38,27 @@ def contact(request):
     """
     View function for the contact page.
     """
-    context = {
-        'title': 'Contact'
-    }
-    return render(request, 'contact.html', context)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        # Send email
+        try:
+            send_mail(
+                f'Contact Form: {subject}',
+                f'Name: {name}\nEmail: {email}\n\nMessage:\n{message}',
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.CONTACT_EMAIL],
+                fail_silently=False,
+            )
+            messages.success(request, 'Your message has been sent successfully!')
+        except Exception as e:
+            messages.error(request, 'There was an error sending your message. Please try again later.')
+            print(f"Error sending email: {str(e)}")
+
+    return render(request, 'contact.html')
 
 def login_view(request):
     """
