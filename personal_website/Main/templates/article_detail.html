@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+    <!-- Page Cover with Fallback -->
+    <div class="notion-page-cover">
+        <div class="notion-cover-gradient"></div>
+    </div>
+
+    <div class="notion-page">
+        <div class="notion-page-header">
+            <h1 class="notion-title">{{ article.title }}</h1>
+            <div class="article-meta">
+                <span class="article-date">{{ article.created_at|date:"F j, Y" }}</span>
+            </div>
+        </div>
+
+        <div class="notion-page-content">
+            <div class="article-content">
+                {{ article.content_html|safe }}
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .article-meta {
+            margin-top: 1rem;
+            color: var(--color-text-default-light);
+            font-size: 0.9rem;
+        }
+
+        .article-content {
+            max-width: 800px;
+            margin: 2rem auto;
+            line-height: 1.8;
+            color: var(--color-text-default);
+        }
+
+        .article-content h1,
+        .article-content h2,
+        .article-content h3,
+        .article-content h4,
+        .article-content h5,
+        .article-content h6 {
+            margin: 2rem 0 1rem;
+            color: var(--color-text-default);
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .article-content pre {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .article-content code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--color-text-default);
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: var(--color-text-default-light);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content a {
+            color: var(--color-text-default);
+            text-decoration: underline;
+            text-decoration-color: rgba(255, 255, 255, 0.3);
+            transition: text-decoration-color 0.2s ease;
+        }
+
+        .article-content a:hover {
+            text-decoration-color: var(--color-text-default);
+        }
+    </style>
+{% endblock %} 

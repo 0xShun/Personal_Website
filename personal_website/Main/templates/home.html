@@ -5,23 +5,37 @@
 
 {% block content %}
 <div class="notion-page">
-    <!-- Page Cover with Fallback -->
-    <div class="notion-page-cover">
-        <div class="notion-cover-gradient"></div>
-    </div>
 
     <!-- Page Icon and Title -->
     <div class="notion-page-header">
-        <div class="notion-page-icon">👋</div>
-        <h1>Shawn Michael Sudaria</h1>
-        <div class="notion-block notion-text">Software Engineer & Researcher</div>
+        <div class="header-flex-container">
+            <div class="notion-page-icon" style="font-size: 100px; width: 200px; height: 200px;">
+                <img src="{% static 'images/pfp.jpg' %}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+            </div>
+            <div class="typing-container">
+                <pre id="typewriter">
+<span class="keyword">class</span> <span class="class-name">Developer</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self):
+        self.name = <span class="string-highlight">"Shawn Michael Sudaria"</span>
+        self.research_group = <span class="string-highlight">"Excelr8 Labs"</span>
+        self.roles = [
+            <span class="string-highlight">"Data Analyst"</span>,
+            <span class="string-highlight">"Data Engineer"</span>,
+            <span class="string-highlight">"Security Researcher"</span>
+        ]
+            </div>
+        </div>
+        <!-- <div class="header-content">
+            <h1>Shawn Michael Sudaria</h1>
+            <div class="notion-block notion-text">Software Engineer & Researcher</div>
+        </div> -->
     </div>
 
     <!-- About Me Section -->
     <div class="notion-callout">
         <div class="notion-callout-icon">💡</div>
         <div class="notion-callout-content">
-            Welcome to my digital garden! Here you'll find my thoughts, projects, and research work.
+            Naturally inquisitive and detail-oriented, I'm a self-driven data enthusiast with a passion for uncovering insights, building reliable data systems, and solving complex problems through analytics and engineering. I thrive at the intersection of logic and creativity — designing, developing, and optimizing data solutions that are both insightful and scalable. Welcome to my digital garden! Here you'll find my thoughts, projects, and research work.
         </div>
     </div>
 
@@ -29,19 +43,19 @@
     <div class="notion-block">
         <h2>Quick Links</h2>
         <div class="notion-grid">
-            <a href="{% url 'projects' %}" class="notion-card">
+            <a href="{% url 'projects' %}" class="quick-link-card">
                 <div class="notion-card-icon">📂</div>
                 <h3>Projects</h3>
                 <p>Explore my technical projects and contributions</p>
             </a>
             
-            <a href="{% url 'research' %}" class="notion-card">
+            <a href="{% url 'research' %}" class="quick-link-card">
                 <div class="notion-card-icon">📚</div>
                 <h3>Research</h3>
                 <p>Read about my research work and publications</p>
             </a>
             
-            <a href="{% url 'articles' %}" class="notion-card">
+            <a href="{% url 'articles' %}" class="quick-link-card">
                 <div class="notion-card-icon">📝</div>
                 <h3>Articles</h3>
                 <p>Browse my articles and blog posts</p>
@@ -75,22 +89,22 @@
             <table class="notion-table">
                 <thead>
                     <tr>
-                        <th>Category</th>
-                        <th>Skills</th>
+                        <th><b>Category</b></th>
+                        <th><b>Skills</b></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Languages</td>
-                        <td>Python, JavaScript, HTML/CSS</td>
+                        <td>Python, JavaScript, Java, C/C++, C#, SQL</td>
                     </tr>
                     <tr>
                         <td>Frameworks</td>
-                        <td>Django, React, Node.js</td>
+                        <td>Django, Flask, PyTorch, Scikit-learn, FastAPI</td>
                     </tr>
                     <tr>
                         <td>Tools</td>
-                        <td>Git, Docker, AWS</td>
+                        <td>Git, Docker, Google Cloud</td>
                     </tr>
                 </tbody>
             </table>
@@ -105,11 +119,11 @@
             <div class="notion-callout-content">
                 Feel free to reach out for collaborations or just to say hi!
                 <div class="notion-buttons">
-                    <a href="mailto:your-email@example.com" class="notion-button">
+                    <a href="mailto:shawnmichael.sudaria04@gmail.com" class="notion-button">
                         <i class="ri-mail-line"></i>
                         <span>Email Me</span>
                     </a>
-                    <a href="https://linkedin.com/in/your-profile" class="notion-button" target="_blank">
+                    <a href="https://www.linkedin.com/in/shawn-michael-sudaria-397a33319/" class="notion-button" target="_blank">
                         <i class="ri-linkedin-line"></i>
                         <span>LinkedIn</span>
                     </a>
@@ -118,4 +132,163 @@
         </div>
     </div>
 </div>
+
+<style>
+.quick-link-card {
+    text-decoration: none;
+    color: var(--text-primary);
+    display: block;
+    background: rgba(28, 27, 27, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+
+.quick-link-card:hover {
+    background: rgba(28, 27, 27, 0.75);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.quick-link-card h3 {
+    margin: 12px 0 8px;
+    color: var(--text-primary);
+}
+
+.quick-link-card p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Updated Typing Animation Styles */
+.header-flex-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    padding: 20px;
+}
+
+.typing-container {
+    flex-grow: 1;
+    min-height: 250px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 8px;
+    padding: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.keyword {
+    color: #ff79c6;
+}
+
+.function {
+    color: #50fa7b;
+}
+
+.class-name {
+    color: #8be9fd;
+}
+
+.string-highlight {
+    color: #f1fa8c;
+}
+
+#typewriter {
+    font-size: 0.95rem;
+    margin: 0;
+    font-family: "Fira Code", "Courier New", monospace;
+    color: #f8f8f2;
+    line-height: 1.5;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+#typewriter:after {
+    content: "|";
+    animation: blink 400ms linear infinite alternate;
+}
+
+@keyframes blink {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.header-content {
+    text-align: center;
+}
+</style>
+
+<script>
+function setupTypewriter(t) {
+    var HTML = t.innerHTML;
+    t.innerHTML = "";
+
+    var cursorPosition = 0,
+        tag = "",
+        writingTag = false,
+        tagOpen = false,
+        typeSpeed = 100,
+        tempTypeSpeed = 0;
+
+    var type = function() {
+        if (writingTag === true) {
+            tag += HTML[cursorPosition];
+        }
+
+        if (HTML[cursorPosition] === "<") {
+            tempTypeSpeed = 0;
+            if (tagOpen) {
+                tagOpen = false;
+                writingTag = true;
+            } else {
+                tag = "";
+                tagOpen = true;
+                writingTag = true;
+                tag += HTML[cursorPosition];
+            }
+        }
+        if (!writingTag && tagOpen) {
+            tag.innerHTML += HTML[cursorPosition];
+        }
+        if (!writingTag && !tagOpen) {
+            if (HTML[cursorPosition] === " ") {
+                tempTypeSpeed = 0;
+            }
+            else {
+                tempTypeSpeed = (Math.random() * typeSpeed) + 50;
+            }
+            t.innerHTML += HTML[cursorPosition];
+        }
+        if (writingTag === true && HTML[cursorPosition] === ">") {
+            tempTypeSpeed = (Math.random() * typeSpeed) + 50;
+            writingTag = false;
+            if (tagOpen) {
+                var newSpan = document.createElement("span");
+                t.appendChild(newSpan);
+                newSpan.innerHTML = tag;
+                tag = newSpan.firstChild;
+            }
+        }
+
+        cursorPosition += 1;
+        if (cursorPosition < HTML.length - 1) {
+            setTimeout(type, tempTypeSpeed);
+        }
+    };
+
+    return {
+        type: type
+    };
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var typewriter = document.getElementById('typewriter');
+    var typer = setupTypewriter(typewriter);
+    typer.type();
+});
+</script>
 {% endblock %}

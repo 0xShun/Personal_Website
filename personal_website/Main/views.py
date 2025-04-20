@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.crypto import get_random_string
 from django.core.cache import cache
-from .models import Project, Tag, Research
+from .models import Project, Research, Article
 import os
 from django.conf import settings
 import logging
+from django.urls import reverse
 
 logger = logging.getLogger(__name__)
 
@@ -120,7 +121,6 @@ def admin(request):
             cover = request.FILES.get('project_cover')
             description = request.POST.get('project_description')
             github_link = request.POST.get('github_link')
-            tags = request.POST.get('project_tags')
             
             # Create new project
             project = Project(
@@ -130,13 +130,6 @@ def admin(request):
                 cover_image=cover
             )
             project.save()
-
-            # Handle tags
-            if tags:
-                tag_list = [tag.strip() for tag in tags.split(',')]
-                for tag_name in tag_list:
-                    tag, created = Tag.objects.get_or_create(name=tag_name)
-                    project.tags.add(tag)
 
         # Handle research upload
         elif 'research_file' in request.FILES:
@@ -154,3 +147,77 @@ def admin(request):
         'title': 'Admin Dashboard'
     }
     return render(request, 'admin.html', context)
+
+@login_required(login_url='/gwapo_login')
+def admin_dashboard(request):
+    return render(request, 'admin/dashboard.html')
+
+def admin_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('admin_dashboard')
+        else:
+            messages.error(request, 'Invalid credentials')
+    
+    return render(request, 'admin/login.html')
+
+@login_required(login_url='/gwapo_login')
+def add_project(request):
+    if request.method == 'POST':
+        # Handle project creation
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        technologies = request.POST.get('technologies')
+        # Add your project creation logic here
+        messages.success(request, 'Project added successfully')
+        return redirect('admin_dashboard')
+    return redirect('admin_dashboard')
+
+@login_required(login_url='/gwapo_login')
+def add_research(request):
+    if request.method == 'POST':
+        # Handle research creation
+        title = request.POST.get('title')
+        abstract = request.POST.get('abstract')
+        published_date = request.POST.get('published_date')
+        # Add your research creation logic here
+        messages.success(request, 'Research added successfully')
+        return redirect('admin_dashboard')
+    return redirect('admin_dashboard')
+
+@login_required(login_url='/gwapo_login')
+def add_article(request):
+    if request.method == 'POST':
+        # Handle article creation
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        category = request.POST.get('category')
+        # Add your article creation logic here
+        messages.success(request, 'Article added successfully')
+        return redirect('admin_dashboard')
+    return redirect('admin_dashboard')
+
+def projects(request):
+    projects = Project.objects.all()
+    return render(request, 'projects.html', {'projects': projects})
+
+def research(request):
+    research_list = Research.objects.all()
+    return render(request, 'research.html', {'research_list': research_list})
+
+def research_detail(request, pk):
+    research = get_object_or_404(Research, pk=pk)
+    return render(request, 'research_detail.html', {'research': research})
+
+def articles(request):
+    articles = Article.objects.all()
+    return render(request, 'articles.html', {'articles': articles})
+
+def article_detail(request, slug):
+    article = get_object_or_404(Article, slug=slug)
+    return render(request, 'article_detail.html', {'article': article})

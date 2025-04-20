@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load project_filters %}
 
 {% block title %}Projects | Shawn Michael Sudaria{% endblock %}
 
@@ -31,67 +32,40 @@
 
     <!-- Projects Grid -->
     <div class="notion-grid">
-        <!-- Project Card 1 -->
-        <div class="notion-card" data-category="web">
-            <div class="notion-card-icon">🌐</div>
-            <h3>Personal Portfolio</h3>
-            <p>A Notion-inspired portfolio website built with Django and modern web technologies.</p>
-            <div class="notion-tags">
-                <span class="notion-tag">Django</span>
-                <span class="notion-tag">HTML/CSS</span>
-                <span class="notion-tag">JavaScript</span>
+        {% if projects %}
+            {% for project in projects %}
+                <div class="notion-card" data-category="{{ project.category }}">
+                    <div class="notion-card-icon">
+                        {% if project.category == 'web' %}🌐
+                        {% elif project.category == 'mobile' %}📱
+                        {% elif project.category == 'ai' %}🤖
+                        {% endif %}
+                    </div>
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.description }}</p>
+                    <div class="notion-tags">
+                        {% for tech in project.technologies.split %}
+                            <span class="notion-tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="notion-buttons">
+                        {% if project.github_link %}
+                            <a href="{{ project.github_link }}" class="notion-button" target="_blank" rel="noopener noreferrer">
+                                <i class="ri-github-line"></i>
+                                <span>View Code</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="notion-callout">
+                <div class="notion-callout-icon">ℹ️</div>
+                <div class="notion-callout-content">
+                    <p>No projects available yet. Check back soon!</p>
+                </div>
             </div>
-            <div class="notion-buttons">
-                <a href="#" class="notion-button">
-                    <i class="ri-github-line"></i>
-                    <span>View Code</span>
-                </a>
-                <a href="#" class="notion-button">
-                    <i class="ri-external-link-line"></i>
-                    <span>Live Demo</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Project Card 2 -->
-        <div class="notion-card" data-category="mobile">
-            <div class="notion-card-icon">📱</div>
-            <h3>Task Manager App</h3>
-            <p>A mobile task management application with real-time synchronization.</p>
-            <div class="notion-tags">
-                <span class="notion-tag">React Native</span>
-                <span class="notion-tag">Firebase</span>
-                <span class="notion-tag">Redux</span>
-            </div>
-            <div class="notion-buttons">
-                <a href="#" class="notion-button">
-                    <i class="ri-github-line"></i>
-                    <span>View Code</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Project Card 3 -->
-        <div class="notion-card" data-category="ai">
-            <div class="notion-card-icon">🤖</div>
-            <h3>AI Image Generator</h3>
-            <p>An AI-powered image generation tool using deep learning models.</p>
-            <div class="notion-tags">
-                <span class="notion-tag">Python</span>
-                <span class="notion-tag">TensorFlow</span>
-                <span class="notion-tag">OpenCV</span>
-            </div>
-            <div class="notion-buttons">
-                <a href="#" class="notion-button">
-                    <i class="ri-github-line"></i>
-                    <span>View Code</span>
-                </a>
-                <a href="#" class="notion-button">
-                    <i class="ri-external-link-line"></i>
-                    <span>Demo</span>
-                </a>
-            </div>
-        </div>
+        {% endif %}
     </div>
 
     <!-- Project Stats -->
@@ -109,18 +83,18 @@
                 <tbody>
                     <tr>
                         <td>Web Development</td>
-                        <td>5</td>
-                        <td>3 Active, 2 Completed</td>
+                        <td>{{ projects|filter_by_category:'web'|length }}</td>
+                        <td>Active</td>
                     </tr>
                     <tr>
                         <td>Mobile Apps</td>
-                        <td>2</td>
-                        <td>1 Active, 1 Completed</td>
+                        <td>{{ projects|filter_by_category:'mobile'|length }}</td>
+                        <td>Active</td>
                     </tr>
                     <tr>
                         <td>AI/ML Projects</td>
-                        <td>3</td>
-                        <td>2 Active, 1 Research</td>
+                        <td>{{ projects|filter_by_category:'ai'|length }}</td>
+                        <td>Active</td>
                     </tr>
                 </tbody>
             </table>
@@ -133,13 +107,7 @@
         <div class="notion-callout">
             <div class="notion-callout-icon">📊</div>
             <div class="notion-callout-content">
-                <p>GitHub contribution graph will be displayed here</p>
-                <div class="notion-buttons">
-                    <a href="https://github.com/your-username" class="notion-button" target="_blank">
-                        <i class="ri-github-line"></i>
-                        <span>View GitHub Profile</span>
-                    </a>
-                </div>
+                <img src="https://github-readme-activity-graph.vercel.app/graph?username=0xShun&theme=high-contrast&hide_border=true&hide_title=true&area=true&custom_title=Total%20contribution%20graph%20in%20all%20repo&bg_color=0a0a0a&color=2edcd9&title_color=2edcd9&point=2edcd9&line=2edcd9" width="95%" alt="activity graph">
             </div>
         </div>
     </div>

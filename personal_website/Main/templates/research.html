@@ -29,59 +29,43 @@
     <!-- Publications -->
     <div class="notion-block">
         <h2>Publications</h2>
-        <div class="notion-toggle">
-            <div class="notion-toggle-header">
-                <span class="notion-toggle-icon">▸</span>
-                <span>2024</span>
-            </div>
-            <div class="notion-toggle-content">
-                <div class="notion-card">
-                    <h3>Title of Research Paper</h3>
-                    <p class="notion-text-muted">Conference/Journal Name, 2024</p>
-                    <p>Brief description of the research and its impact on the field.</p>
-                    <div class="notion-tags">
-                        <span class="notion-tag">Machine Learning</span>
-                        <span class="notion-tag">Neural Networks</span>
+        {% if research_list %}
+            {% regroup research_list by published_date|date:"Y" as year_list %}
+            {% for year in year_list %}
+                <div class="notion-toggle">
+                    <div class="notion-toggle-header">
+                        <span class="notion-toggle-icon">▸</span>
+                        <span>{{ year.grouper }}</span>
                     </div>
-                    <div class="notion-buttons">
-                        <a href="#" class="notion-button">
-                            <i class="ri-file-paper-2-line"></i>
-                            <span>Read Paper</span>
-                        </a>
-                        <a href="#" class="notion-button">
-                            <i class="ri-github-line"></i>
-                            <span>View Code</span>
-                        </a>
+                    <div class="notion-toggle-content">
+                        {% for research in year.list %}
+                            <div class="notion-card">
+                                <h3>{{ research.title }}</h3>
+                                <p class="notion-text-muted">Published: {{ research.published_date|date:"F j, Y" }}</p>
+                                <div class="research-abstract">
+                                    <p>{{ research.abstract }}</p>
+                                </div>
+                                {% if research.pdf_file %}
+                                    <div class="notion-buttons">
+                                        <a href="{{ research.pdf_file.url }}" class="notion-button" target="_blank" rel="noopener noreferrer">
+                                            <i class="ri-file-paper-2-line"></i>
+                                            <span>Read Paper</span>
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Current Research -->
-    <div class="notion-block">
-        <h2>Current Research</h2>
-        <div class="notion-grid">
-            <div class="notion-card">
-                <div class="notion-card-icon">🧠</div>
-                <h3>Neural Architecture Search</h3>
-                <p>Investigating efficient methods for automated machine learning model design.</p>
-                <div class="notion-progress">
-                    <div class="notion-progress-bar" style="width: 75%"></div>
-                    <span class="notion-progress-text">In Progress (75%)</span>
+            {% endfor %}
+        {% else %}
+            <div class="notion-callout">
+                <div class="notion-callout-icon">ℹ️</div>
+                <div class="notion-callout-content">
+                    <p>No research papers available yet. Check back soon!</p>
                 </div>
             </div>
-
-            <div class="notion-card">
-                <div class="notion-card-icon">🤖</div>
-                <h3>Reinforcement Learning</h3>
-                <p>Developing new algorithms for multi-agent systems in complex environments.</p>
-                <div class="notion-progress">
-                    <div class="notion-progress-bar" style="width: 40%"></div>
-                    <span class="notion-progress-text">In Progress (40%)</span>
-                </div>
-            </div>
-        </div>
+        {% endif %}
     </div>
 
     <!-- Research Statistics -->
@@ -99,8 +83,8 @@
                 <tbody>
                     <tr>
                         <td>Publications</td>
-                        <td>8</td>
-                        <td>5 Conference Papers, 3 Journal Articles</td>
+                        <td>{{ research_list|length }}</td>
+                        <td>Conference Papers and Journal Articles</td>
                     </tr>
                     <tr>
                         <td>Citations</td>
@@ -125,7 +109,7 @@
             <div class="notion-callout-content">
                 <p>Interested in collaboration? I'm always open to new research opportunities!</p>
                 <div class="notion-buttons">
-                    <a href="mailto:your-email@example.com" class="notion-button">
+                    <a href="mailto:shawnmichaelsudaria14@gmail.com" class="notion-button">
                         <i class="ri-mail-line"></i>
                         <span>Contact for Collaboration</span>
                     </a>
