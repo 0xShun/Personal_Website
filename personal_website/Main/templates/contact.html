@@ -1,66 +1,82 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <!-- Contact Form Column -->
-        <div class="col-md-6">
-            <h2 class="mb-4 text-center">Contact Me</h2>
-            <form>
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" required>
-                </div>
-                <div class="mb-3">
-                    <label for="subject" class="form-label">Subject</label>
-                    <input type="text" class="form-control" id="subject" required>
-                </div>
-                <div class="mb-3">
-                    <label for="message" class="form-label">Message</label>
-                    <textarea class="form-control" id="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Send Message</button>
-            </form>
-        </div>
+{% block title %}Contact | Shawn Michael Sudaria{% endblock %}
 
-        <!-- Social Media Column -->
-        <div class="col-md-6">
-            <h2 class="mb-4 text-center">Connect With Me</h2>
-            <div class="d-flex flex-column gap-4 align-items-center">
-                <a href="#" class="text-decoration-none">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-github me-3" style="font-size: 2rem;"></i>
-                        <span>GitHub</span>
+{% block content %}
+<div class="notion-page">
+    <!-- Page Cover with Fallback -->
+    <div class="notion-page-cover">
+        <div class="notion-cover-gradient"></div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="notion-page-header">
+        <div class="notion-page-icon">📧</div>
+        <h1>Contact</h1>
+        <div class="notion-block notion-text">Let's connect and collaborate!</div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <!-- Contact Form Column -->
+            <div class="col-md-6">
+                <h2 class="mb-4 text-center">Contact Me</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" required>
                     </div>
-                </a>
-                <a href="#" class="text-decoration-none">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-linkedin me-3" style="font-size: 2rem;"></i>
-                        <span>LinkedIn</span>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" required>
                     </div>
-                </a>
-                <a href="#" class="text-decoration-none">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-instagram me-3" style="font-size: 2rem;"></i>
-                        <span>Instagram</span>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="subject" required>
                     </div>
-                </a>
-                <a href="#" class="text-decoration-none">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-facebook me-3" style="font-size: 2rem;"></i>
-                        <span>Facebook</span>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="5" required></textarea>
                     </div>
-                </a>
-                <a href="#" class="text-decoration-none">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-twitter me-3" style="font-size: 2rem;"></i>
-                        <span>Twitter</span>
-                    </div>
-                </a>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+
+            <!-- Social Media Column -->
+            <div class="col-md-6">
+                <h2 class="mb-4 text-center">Connect With Me</h2>
+                <div class="d-flex flex-column gap-4 align-items-center">
+                    <a href="#" class="text-decoration-none">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-github me-3" style="font-size: 2rem;"></i>
+                            <span>GitHub</span>
+                        </div>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-linkedin me-3" style="font-size: 2rem;"></i>
+                            <span>LinkedIn</span>
+                        </div>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-instagram me-3" style="font-size: 2rem;"></i>
+                            <span>Instagram</span>
+                        </div>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-facebook me-3" style="font-size: 2rem;"></i>
+                            <span>Facebook</span>
+                        </div>
+                    </a>
+                    <a href="#" class="text-decoration-none">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-twitter me-3" style="font-size: 2rem;"></i>
+                            <span>Twitter</span>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

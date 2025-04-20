@@ -1,0 +1,49 @@
+{% load static %}
+<nav class="navbar">
+    <div class="nav-container">
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="nav-logo">
+            <img src="{% static 'images/logo.jpg' %}" alt="Logo">
+        </a>
+
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+
+        <!-- Mobile Menu -->
+        <div class="nav-menu">
+            <a href="{% url 'home' %}" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="{% url 'projects' %}" class="nav-item">
+                <span class="nav-icon">📂</span>
+                <span>Projects</span>
+            </a>
+            <a href="mailto:your-email@example.com" class="nav-item" target="_blank">
+                <span class="nav-icon">✉️</span>
+                <span>Email</span>
+                <svg class="external-link" viewBox="0 0 24 24">
+                    <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+            </a>
+            <a href="https://linkedin.com/in/your-profile" class="nav-item" target="_blank">
+                <span class="nav-icon">in</span>
+                <span>LinkedIn</span>
+                <svg class="external-link" viewBox="0 0 24 24">
+                    <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+            </a>
+            <a href="https://github.com/your-username" class="nav-item" target="_blank">
+                <span class="nav-icon"></span>
+                <span>Github</span>
+                <svg class="external-link" viewBox="0 0 24 24">
+                    <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</nav> 

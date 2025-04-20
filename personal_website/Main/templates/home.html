@@ -1,83 +1,121 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home | Shawn Michael Sudaria{% endblock %}
 
 {% block content %}
-<style>
-    .custom-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px); 
-      border-radius: 10px;
-      padding: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2); 
-      margin-bottom: 20px; 
-    }
-    .icon {
-      font-size: 30px;
-      background-color: rgba(56, 56, 86, 0.7); 
-      border-radius: 50%;
-      padding: 10px;
-      display: inline-block;
-    }
-</style>
-<div class="container py-5">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="custom-card">
-        <h5>Profile Overview</h5>
-        <p>Hey, I'm Jason! I'm a frontend dev and cybersecurity CTF player...</p>
-      </div>
+<div class="notion-page">
+    <!-- Page Cover with Fallback -->
+    <div class="notion-page-cover">
+        <div class="notion-cover-gradient"></div>
     </div>
-    <div class="col-md-3">
-      <div class="custom-card text-center">
-        <div class="icon">🏁</div>
-        <p>Achievements</p>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="custom-card text-center">
-        <div class="icon">⚙️</div>
-        <p>Settings</p>
-      </div>
-    </div>
-  </div>
 
-  <div class="row mt-3">
-    <div class="col-md-4">
-      <div class="custom-card text-center">
-        <img src="japan.png" class="img-fluid rounded" alt="Japan">
-        <p>A Retrospective on Japan</p>
-      </div>
+    <!-- Page Icon and Title -->
+    <div class="notion-page-header">
+        <div class="notion-page-icon">👋</div>
+        <h1>Shawn Michael Sudaria</h1>
+        <div class="notion-block notion-text">Software Engineer & Researcher</div>
     </div>
-    <div class="col-md-4">
-      <div class="custom-card">
-        <h5>Statistics</h5>
-        <p>Heatmap and other cool data.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="custom-card">
-        <h5>Last Played</h5>
-        <p>Music stats</p>
-      </div>
-    </div>
-  </div>
 
-  <div class="row mt-3">
-    <div class="col-md-6">
-      <div class="custom-card">
-        <h5>Contribution Heatmap</h5>
-        <p>Data for the last few months</p>
-      </div>
+    <!-- About Me Section -->
+    <div class="notion-callout">
+        <div class="notion-callout-icon">💡</div>
+        <div class="notion-callout-content">
+            Welcome to my digital garden! Here you'll find my thoughts, projects, and research work.
+        </div>
     </div>
-    <div class="col-md-6">
-      <div class="custom-card">
-        <h5>Activity Stats</h5>
-        <ul>
-          <li>GitHub: 521h</li>
-          <li>Twitter: 427h</li>
-          <li>Others...</li>
-        </ul>
-      </div>
+
+    <!-- Quick Links -->
+    <div class="notion-block">
+        <h2>Quick Links</h2>
+        <div class="notion-grid">
+            <a href="{% url 'projects' %}" class="notion-card">
+                <div class="notion-card-icon">📂</div>
+                <h3>Projects</h3>
+                <p>Explore my technical projects and contributions</p>
+            </a>
+            
+            <a href="{% url 'research' %}" class="notion-card">
+                <div class="notion-card-icon">📚</div>
+                <h3>Research</h3>
+                <p>Read about my research work and publications</p>
+            </a>
+            
+            <a href="{% url 'articles' %}" class="notion-card">
+                <div class="notion-card-icon">📝</div>
+                <h3>Articles</h3>
+                <p>Browse my articles and blog posts</p>
+            </a>
+        </div>
     </div>
-  </div>
+
+    <!-- Featured Section -->
+    <div class="notion-block">
+        <h2>Featured Work</h2>
+        <div class="notion-toggle">
+            <div class="notion-toggle-header">
+                <span class="notion-toggle-icon">▸</span>
+                <span>Latest Project: Portfolio Website</span>
+            </div>
+            <div class="notion-toggle-content">
+                <p>A personal portfolio website built with Django and styled like Notion.</p>
+                <ul class="notion-list">
+                    <li class="notion-list-item">Notion-like UI/UX</li>
+                    <li class="notion-list-item">Responsive design</li>
+                    <li class="notion-list-item">Dark mode support</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Section -->
+    <div class="notion-block">
+        <h2>Skills & Technologies</h2>
+        <div class="notion-table-wrapper">
+            <table class="notion-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Skills</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Languages</td>
+                        <td>Python, JavaScript, HTML/CSS</td>
+                    </tr>
+                    <tr>
+                        <td>Frameworks</td>
+                        <td>Django, React, Node.js</td>
+                    </tr>
+                    <tr>
+                        <td>Tools</td>
+                        <td>Git, Docker, AWS</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="notion-block">
+        <h2>Get in Touch</h2>
+        <div class="notion-callout">
+            <div class="notion-callout-icon">📫</div>
+            <div class="notion-callout-content">
+                Feel free to reach out for collaborations or just to say hi!
+                <div class="notion-buttons">
+                    <a href="mailto:your-email@example.com" class="notion-button">
+                        <i class="ri-mail-line"></i>
+                        <span>Email Me</span>
+                    </a>
+                    <a href="https://linkedin.com/in/your-profile" class="notion-button" target="_blank">
+                        <i class="ri-linkedin-line"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

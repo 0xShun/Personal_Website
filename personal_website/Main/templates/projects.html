@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Projects | Shawn Michael Sudaria{% endblock %}
+
+{% block content %}
+<div class="notion-page">
+    <!-- Page Cover with Fallback -->
+    <div class="notion-page-cover">
+        <div class="notion-cover-gradient"></div>
+    </div>
+
+    <!-- Page Header -->
+    <div class="notion-page-header">
+        <div class="notion-page-icon">📂</div>
+        <h1>Projects</h1>
+        <div class="notion-block notion-text">A collection of my technical projects and experiments</div>
+    </div>
+
+    <!-- Project Filters -->
+    <div class="notion-callout">
+        <div class="notion-callout-icon">🔍</div>
+        <div class="notion-callout-content">
+            <div class="notion-buttons">
+                <button class="notion-button active" data-filter="all">All</button>
+                <button class="notion-button" data-filter="web">Web Development</button>
+                <button class="notion-button" data-filter="mobile">Mobile Apps</button>
+                <button class="notion-button" data-filter="ai">AI/ML</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="notion-grid">
+        <!-- Project Card 1 -->
+        <div class="notion-card" data-category="web">
+            <div class="notion-card-icon">🌐</div>
+            <h3>Personal Portfolio</h3>
+            <p>A Notion-inspired portfolio website built with Django and modern web technologies.</p>
+            <div class="notion-tags">
+                <span class="notion-tag">Django</span>
+                <span class="notion-tag">HTML/CSS</span>
+                <span class="notion-tag">JavaScript</span>
+            </div>
+            <div class="notion-buttons">
+                <a href="#" class="notion-button">
+                    <i class="ri-github-line"></i>
+                    <span>View Code</span>
+                </a>
+                <a href="#" class="notion-button">
+                    <i class="ri-external-link-line"></i>
+                    <span>Live Demo</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Project Card 2 -->
+        <div class="notion-card" data-category="mobile">
+            <div class="notion-card-icon">📱</div>
+            <h3>Task Manager App</h3>
+            <p>A mobile task management application with real-time synchronization.</p>
+            <div class="notion-tags">
+                <span class="notion-tag">React Native</span>
+                <span class="notion-tag">Firebase</span>
+                <span class="notion-tag">Redux</span>
+            </div>
+            <div class="notion-buttons">
+                <a href="#" class="notion-button">
+                    <i class="ri-github-line"></i>
+                    <span>View Code</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Project Card 3 -->
+        <div class="notion-card" data-category="ai">
+            <div class="notion-card-icon">🤖</div>
+            <h3>AI Image Generator</h3>
+            <p>An AI-powered image generation tool using deep learning models.</p>
+            <div class="notion-tags">
+                <span class="notion-tag">Python</span>
+                <span class="notion-tag">TensorFlow</span>
+                <span class="notion-tag">OpenCV</span>
+            </div>
+            <div class="notion-buttons">
+                <a href="#" class="notion-button">
+                    <i class="ri-github-line"></i>
+                    <span>View Code</span>
+                </a>
+                <a href="#" class="notion-button">
+                    <i class="ri-external-link-line"></i>
+                    <span>Demo</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Stats -->
+    <div class="notion-block">
+        <h2>Project Statistics</h2>
+        <div class="notion-table-wrapper">
+            <table class="notion-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Count</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Web Development</td>
+                        <td>5</td>
+                        <td>3 Active, 2 Completed</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile Apps</td>
+                        <td>2</td>
+                        <td>1 Active, 1 Completed</td>
+                    </tr>
+                    <tr>
+                        <td>AI/ML Projects</td>
+                        <td>3</td>
+                        <td>2 Active, 1 Research</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Contribution Graph -->
+    <div class="notion-block">
+        <h2>Contribution Activity</h2>
+        <div class="notion-callout">
+            <div class="notion-callout-icon">📊</div>
+            <div class="notion-callout-content">
+                <p>GitHub contribution graph will be displayed here</p>
+                <div class="notion-buttons">
+                    <a href="https://github.com/your-username" class="notion-button" target="_blank">
+                        <i class="ri-github-line"></i>
+                        <span>View GitHub Profile</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Project Filter JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const projectCards = document.querySelectorAll('.notion-card[data-category]');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Add active class to clicked button
+            button.classList.add('active');
+
+            const filter = button.getAttribute('data-filter');
+
+            projectCards.forEach(card => {
+                if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %} 

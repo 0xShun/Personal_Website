@@ -7,12 +7,26 @@ from django.contrib.auth.decorators import user_passes_test
 from django.utils.crypto import get_random_string
 from django.core.cache import cache
 from .models import Project, Tag, Research
+import os
+from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 def home(request):
     """
     View function for the home page.
     """
+    # Debug static files
+    logo_paths = []
+    for static_dir in settings.STATICFILES_DIRS:
+        potential_path = os.path.join(static_dir, 'images', 'logo.jpg')
+        exists = os.path.exists(potential_path)
+        logo_paths.append(f"Checking {potential_path}: {'Found' if exists else 'Not found'}")
+    
+    logger.info("Static file paths checked:\n" + "\n".join(logo_paths))
+    
     context = {
         'title': 'Home'
     }

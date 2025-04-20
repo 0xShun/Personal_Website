@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Research | Shawn Michael Sudaria{% endblock %}
+
+{% block content %}
+<div class="notion-page">
+    <!-- Page Header -->
+    <div class="notion-page-header">
+        <div class="notion-page-icon">📚</div>
+        <h1>Research</h1>
+        <div class="notion-block notion-text">Exploring the frontiers of technology through academic research</div>
+    </div>
+
+    <!-- Research Areas -->
+    <div class="notion-callout">
+        <div class="notion-callout-icon">🔬</div>
+        <div class="notion-callout-content">
+            <h3>Research Focus Areas</h3>
+            <div class="notion-tags">
+                <span class="notion-tag">Machine Learning</span>
+                <span class="notion-tag">Computer Vision</span>
+                <span class="notion-tag">Natural Language Processing</span>
+                <span class="notion-tag">Data Science</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publications -->
+    <div class="notion-block">
+        <h2>Publications</h2>
+        <div class="notion-toggle">
+            <div class="notion-toggle-header">
+                <span class="notion-toggle-icon">▸</span>
+                <span>2024</span>
+            </div>
+            <div class="notion-toggle-content">
+                <div class="notion-card">
+                    <h3>Title of Research Paper</h3>
+                    <p class="notion-text-muted">Conference/Journal Name, 2024</p>
+                    <p>Brief description of the research and its impact on the field.</p>
+                    <div class="notion-tags">
+                        <span class="notion-tag">Machine Learning</span>
+                        <span class="notion-tag">Neural Networks</span>
+                    </div>
+                    <div class="notion-buttons">
+                        <a href="#" class="notion-button">
+                            <i class="ri-file-paper-2-line"></i>
+                            <span>Read Paper</span>
+                        </a>
+                        <a href="#" class="notion-button">
+                            <i class="ri-github-line"></i>
+                            <span>View Code</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Research -->
+    <div class="notion-block">
+        <h2>Current Research</h2>
+        <div class="notion-grid">
+            <div class="notion-card">
+                <div class="notion-card-icon">🧠</div>
+                <h3>Neural Architecture Search</h3>
+                <p>Investigating efficient methods for automated machine learning model design.</p>
+                <div class="notion-progress">
+                    <div class="notion-progress-bar" style="width: 75%"></div>
+                    <span class="notion-progress-text">In Progress (75%)</span>
+                </div>
+            </div>
+
+            <div class="notion-card">
+                <div class="notion-card-icon">🤖</div>
+                <h3>Reinforcement Learning</h3>
+                <p>Developing new algorithms for multi-agent systems in complex environments.</p>
+                <div class="notion-progress">
+                    <div class="notion-progress-bar" style="width: 40%"></div>
+                    <span class="notion-progress-text">In Progress (40%)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research Statistics -->
+    <div class="notion-block">
+        <h2>Research Impact</h2>
+        <div class="notion-table-wrapper">
+            <table class="notion-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Count</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Publications</td>
+                        <td>8</td>
+                        <td>5 Conference Papers, 3 Journal Articles</td>
+                    </tr>
+                    <tr>
+                        <td>Citations</td>
+                        <td>120+</td>
+                        <td>Google Scholar</td>
+                    </tr>
+                    <tr>
+                        <td>Projects</td>
+                        <td>4</td>
+                        <td>2 Active, 2 Completed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Collaborations -->
+    <div class="notion-block">
+        <h2>Research Collaborations</h2>
+        <div class="notion-callout">
+            <div class="notion-callout-icon">🤝</div>
+            <div class="notion-callout-content">
+                <p>Interested in collaboration? I'm always open to new research opportunities!</p>
+                <div class="notion-buttons">
+                    <a href="mailto:your-email@example.com" class="notion-button">
+                        <i class="ri-mail-line"></i>
+                        <span>Contact for Collaboration</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,163 +1,124 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" class="dark-mode">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Shawn Michael Sudaria{% endblock %}</title>
-    {% load static %}
+    <title>{% block title %}{% endblock %}</title>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <style>
-        * {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 15px;
-        }
-        
-        .navbar {
-            padding: 1rem;
-            color: #fff !important;
-            z-index: 1030;
-        }
-
-        .nav-link {
-            margin: 0 1rem;
-            font-size: 20px;
-            color: #fff; /* Changed to white */
-        }
-
-        .nav-link:hover {
-            margin: 0 1rem;
-            font-size: 20px;
-            color: rgb(2, 201, 201) !important;
-        }
-
-        body {
-            padding-top: 90px; 
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            background-color: #000; /* Darker dark mode background color */
-            color: #fff; /* Dark mode text color */
-        }
-
-        main {
-            flex: 1;
-            position: relative;
-            z-index: 1;
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 1rem;
-            text-align: center;
-            width: 100%;
-        }
-    </style>
+    <!-- Remixicon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/notion.css' %}">
+    
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon" style="color: white;"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'articles' %}">Articles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'projects' %}">Projects</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'research' %}">Research</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <!-- Navbar -->
+    <nav class="notion-nav">
+        <button id="sidebar-toggle" class="notion-button">
+            <i class="ri-menu-line"></i>
+        </button>
+        <a href="{% url 'home' %}" class="notion-nav-brand">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="notion-nav-logo">
+        </a>
+        <div class="notion-nav-right">
+            <button id="theme-toggle" class="notion-button">
+                <i class="ri-sun-line"></i>
+            </button>
+        </div>
+    </nav>
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-    <footer>
-        <p>&copy; {% now "Y" %} Shawn Michael Sudaria. All rights reserved.</p>
-    </footer>
+    <!-- Sidebar -->
+    <div class="notion-sidebar" id="sidebar">
+        <div class="notion-sidebar-content">
+            <!-- Navigation Links -->
+            <a href="{% url 'home' %}" class="notion-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                <i class="ri-home-line"></i>
+                <span>Home</span>
+            </a>
+            <a href="{% url 'projects' %}" class="notion-link {% if request.resolver_match.url_name == 'projects' %}active{% endif %}">
+                <i class="ri-folder-line"></i>
+                <span>Projects</span>
+            </a>
+            <a href="{% url 'research' %}" class="notion-link {% if request.resolver_match.url_name == 'research' %}active{% endif %}">
+                <i class="ri-book-line"></i>
+                <span>Research</span>
+            </a>
+            <a href="{% url 'articles' %}" class="notion-link {% if request.resolver_match.url_name == 'articles' %}active{% endif %}">
+                <i class="ri-article-line"></i>
+                <span>Articles</span>
+            </a>
+            <a href="{% url 'contact' %}" class="notion-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+                <i class="ri-mail-line"></i>
+                <span>Email</span>
+            </a>
+            <a href="https://linkedin.com/in/your-profile" class="notion-link" target="_blank">
+                <i class="ri-linkedin-line"></i>
+                <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/your-username" class="notion-link" target="_blank">
+                <i class="ri-github-line"></i>
+                <span>Github</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="notion-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- <script src="{% static 'js/main.js' %}"></script> -->
-</body>
-</html>
-            position: relative;
-            background-color: #000; /* Darker dark mode background color */
-            color: #fff; /* Dark mode text color */
-        }
-
-        main {
-            flex: 1;
-            position: relative;
-            z-index: 1;
-        }
-
-        footer {
-            margin-top: auto;
-            padding: 1rem;
-            text-align: center;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon" style="color: white;"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'articles' %}">Articles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'projects' %}">Projects</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'research' %}">Research</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
-
-    <footer>
-        <p>&copy; {% now "Y" %} Shawn Michael Sudaria. All rights reserved.</p>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- <script src="{% static 'js/main.js' %}"></script> -->
+    
+    <!-- Theme and Sidebar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = themeToggle.querySelector('i');
+            
+            function updateThemeIcon() {
+                const isDarkMode = document.documentElement.classList.contains('dark-mode');
+                themeIcon.className = isDarkMode ? 'ri-sun-line' : 'ri-moon-line';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark-mode');
+                updateThemeIcon();
+                localStorage.setItem('theme', document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light');
+            });
+            
+            // Set initial theme from localStorage
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.classList.toggle('dark-mode', savedTheme === 'dark');
+            updateThemeIcon();
+            
+            // Sidebar Toggle
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            function toggleSidebar() {
+                sidebar.classList.toggle('active');
+                overlay.classList.toggle('active');
+            }
+            
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            
+            // Close sidebar when clicking overlay
+            overlay.addEventListener('click', toggleSidebar);
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -1,0 +1,200 @@
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #121212;
+    color: white;
+    z-index: 1000;
+    height: 64px;
+}
+
+.nav-container {
+    width: 100%;
+    padding: 0 24px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Logo Styles */
+.nav-brand {
+    display: flex;
+    align-items: center;
+    margin-right: auto; /* Push everything else to the right */
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.shun-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1); /* Make the logo white */
+}
+
+.logo-text {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* For future image logo */
+.nav-logo img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Hamburger Menu Styles */
+.hamburger {
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    outline: none;
+    z-index: 1001;
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.hamburger-line {
+    width: 24px;
+    height: 2px;
+    background-color: white;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+    transform-origin: center;
+}
+
+/* Hamburger Animation */
+.hamburger.active {
+    transform: rotate(180deg);
+}
+
+.hamburger.active .hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: scale(0);
+}
+
+.hamburger.active .hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Navigation Menu */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    right: -300px; /* Start off-screen */
+    bottom: 0;
+    width: 300px;
+    background-color: #191919;
+    padding: 80px 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: right 0.3s cubic-bezier(0.2, 0, 0, 1);
+    box-shadow: none;
+    z-index: 1000;
+}
+
+.nav-menu.active {
+    right: 0;
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Navigation Items */
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px 24px;
+    color: #ededed;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    font-size: 0.95rem;
+    margin: 0 12px;
+    border-radius: 4px;
+}
+
+.nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.nav-icon {
+    margin-right: 12px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    opacity: 0.8;
+    width: 24px;
+}
+
+/* External Link Icon */
+.external-link {
+    width: 14px;
+    height: 14px;
+    margin-left: 8px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    opacity: 0.5;
+}
+
+/* Add overlay for click-outside detection */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    pointer-events: none;
+    z-index: 999;
+    transition: background-color 0.3s ease, visibility 0.3s ease;
+    visibility: hidden;
+}
+
+.nav-overlay.active {
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: auto;
+    visibility: visible;
+}
+
+/* Menu Section Divider */
+.nav-divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    margin: 8px 24px;
+}
+
+/* Menu Section Header */
+.nav-section-header {
+    padding: 8px 36px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* Menu Section */
+.nav-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

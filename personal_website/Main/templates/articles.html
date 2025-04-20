@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Articles | Shawn Michael Sudaria{% endblock %}
+
+{% block content %}
+<div class="notion-page">
+    <!-- Page Header -->
+    <div class="notion-page-header">
+        <div class="notion-page-icon">📝</div>
+        <h1>Articles</h1>
+        <div class="notion-block notion-text">Thoughts, tutorials, and technical writings</div>
+    </div>
+
+    <!-- Article Categories -->
+    <div class="notion-callout">
+        <div class="notion-callout-icon">📑</div>
+        <div class="notion-callout-content">
+            <div class="notion-buttons">
+                <button class="notion-button active" data-filter="all">All Topics</button>
+                <button class="notion-button" data-filter="tutorial">Tutorials</button>
+                <button class="notion-button" data-filter="tech">Tech Reviews</button>
+                <button class="notion-button" data-filter="opinion">Opinion Pieces</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Article -->
+    <div class="notion-block">
+        <h2>Featured Article</h2>
+        <div class="notion-card featured">
+            <div class="notion-card-icon">⭐</div>
+            <span class="notion-tag featured-tag">Featured</span>
+            <h3>Building a Modern Portfolio with Django and Notion UI</h3>
+            <p>A comprehensive guide to creating a personal portfolio website with Django and Notion-inspired design...</p>
+            <div class="notion-metadata">
+                <span><i class="ri-calendar-line"></i> March 15, 2024</span>
+                <span><i class="ri-time-line"></i> 15 min read</span>
+                <span><i class="ri-eye-line"></i> 1.2k views</span>
+            </div>
+            <div class="notion-tags">
+                <span class="notion-tag">Django</span>
+                <span class="notion-tag">Web Development</span>
+                <span class="notion-tag">UI/UX</span>
+            </div>
+            <div class="notion-buttons">
+                <a href="#" class="notion-button">
+                    <i class="ri-article-line"></i>
+                    <span>Read Article</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Grid -->
+    <div class="notion-block">
+        <h2>Latest Articles</h2>
+        <div class="notion-grid">
+            <!-- Article Card 1 -->
+            <div class="notion-card" data-category="tutorial">
+                <div class="notion-card-icon">🔧</div>
+                <h3>Getting Started with Machine Learning</h3>
+                <p>A beginner's guide to understanding and implementing basic ML algorithms...</p>
+                <div class="notion-metadata">
+                    <span><i class="ri-calendar-line"></i> March 10, 2024</span>
+                    <span><i class="ri-time-line"></i> 10 min read</span>
+                </div>
+                <div class="notion-tags">
+                    <span class="notion-tag">Machine Learning</span>
+                    <span class="notion-tag">Python</span>
+                </div>
+            </div>
+
+            <!-- Article Card 2 -->
+            <div class="notion-card" data-category="tech">
+                <div class="notion-card-icon">💻</div>
+                <h3>The Future of Web Development</h3>
+                <p>Exploring upcoming trends and technologies in web development...</p>
+                <div class="notion-metadata">
+                    <span><i class="ri-calendar-line"></i> March 5, 2024</span>
+                    <span><i class="ri-time-line"></i> 8 min read</span>
+                </div>
+                <div class="notion-tags">
+                    <span class="notion-tag">Web Development</span>
+                    <span class="notion-tag">Future Tech</span>
+                </div>
+            </div>
+
+            <!-- Article Card 3 -->
+            <div class="notion-card" data-category="opinion">
+                <div class="notion-card-icon">💭</div>
+                <h3>AI Ethics in Modern Software</h3>
+                <p>Discussing the ethical implications of AI in software development...</p>
+                <div class="notion-metadata">
+                    <span><i class="ri-calendar-line"></i> March 1, 2024</span>
+                    <span><i class="ri-time-line"></i> 12 min read</span>
+                </div>
+                <div class="notion-tags">
+                    <span class="notion-tag">AI</span>
+                    <span class="notion-tag">Ethics</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter Signup -->
+    <div class="notion-block">
+        <h2>Stay Updated</h2>
+        <div class="notion-callout">
+            <div class="notion-callout-icon">📮</div>
+            <div class="notion-callout-content">
+                <p>Subscribe to my newsletter for the latest articles and updates.</p>
+                <form class="notion-form">
+                    <input type="email" class="notion-input" placeholder="Enter your email">
+                    <button type="submit" class="notion-button">
+                        <i class="ri-mail-send-line"></i>
+                        <span>Subscribe</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Article Filter JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const articleCards = document.querySelectorAll('.notion-card[data-category]');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const filter = button.getAttribute('data-filter');
+            articleCards.forEach(card => {
+                if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %} 
