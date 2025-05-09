@@ -227,7 +227,7 @@ def projects(request):
     if category_filter:
         projects = Project.objects.filter(categories__id=category_filter)
     else:
-        projects = Project.objects.all()
+    projects = Project.objects.all()
     categories = ProjectCategory.objects.all()
     return render(request, 'projects.html', {'projects': projects, 'categories': categories, 'selected_category': category_filter})
 
@@ -236,7 +236,7 @@ def research(request):
     if category_filter:
         research_list = Research.objects.filter(categories__id=category_filter)
     else:
-        research_list = Research.objects.all()
+    research_list = Research.objects.all()
     categories = ResearchCategory.objects.all()
     return render(request, 'research.html', {'research_list': research_list, 'categories': categories, 'selected_category': category_filter})
 
@@ -249,7 +249,7 @@ def articles(request):
     if category_filter:
         articles = Article.objects.filter(categories__id=category_filter)
     else:
-        articles = Article.objects.all()
+    articles = Article.objects.all()
     categories = ArticleCategory.objects.all()
     return render(request, 'articles.html', {'articles': articles, 'categories': categories, 'selected_category': category_filter})
 
