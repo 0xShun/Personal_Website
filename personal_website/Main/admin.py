@@ -1,34 +1,47 @@
 from django.contrib import admin
 from .models import Project, Article, Research
+from django.contrib.admin import SimpleListFilter
+from Articles.models import Tag
+
+class TagFilter(SimpleListFilter):
+    title = 'tags'
+    parameter_name = 'tags'
+
+    def lookups(self, request, model_admin):
+        return [(tag.id, tag.name) for tag in Tag.objects.all()]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(tags__id__exact=self.value())
+        return queryset
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'technologies', 'github_link', 'created_at')
+    list_display = ('title', 'technologies', 'github_link', 'created_at')
     search_fields = ('title', 'description', 'technologies')
-    list_filter = ('category', 'created_at')
+    list_filter = ('created_at', TagFilter)
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'description', 'category')
+            'fields': ('title', 'description')
         }),
         ('Technical Details', {
             'fields': ('technologies', 'github_link')
         }),
     )
-    list_editable = ('category',)  # Allow quick category changes from list view
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('title', 'category', 'created_at', 'updated_at')
+    list_display = ('title', 'created_at', 'updated_at')
     list_display_links = ('title',)
     search_fields = ('title',)
-    list_filter = ('category', 'created_at')
+    list_filter = ('created_at', TagFilter)
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('content_html', 'content_md')
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Article Information', {
-            'fields': ('title', 'slug', 'category')
+            'fields': ('title', 'slug')
         }),
         ('Content', {
             'fields': ('markdown_file',),
@@ -40,7 +53,6 @@ class ArticleAdmin(admin.ModelAdmin):
             'description': 'Preview of the processed content (read-only)'
         })
     )
-    list_editable = ('category',)  # Allow quick category changes from list view
 
     def save_model(self, request, obj, form, change):
         # Handle file upload and save

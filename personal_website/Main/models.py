@@ -4,6 +4,7 @@ import markdown
 from django.utils.text import slugify
 from django.core.files.storage import default_storage
 import os
+from Articles.models import Tag
 
 class Project(models.Model):
     CATEGORY_CHOICES = [
@@ -93,10 +94,21 @@ class Article(models.Model):
         ordering = ['-created_at']
 
 class Research(models.Model):
+    CATEGORY_CHOICES = [
+        ('science', 'Science'),
+        ('technology', 'Technology'),
+        ('engineering', 'Engineering'),
+    ]
+
     title = models.CharField(max_length=200)
     abstract = models.TextField()
     pdf_file = models.FileField(upload_to='research_pdfs/')
     published_date = models.DateField()
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        default='science'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
