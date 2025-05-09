@@ -2,6 +2,7 @@ from django.contrib import admin
 from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage
 from django.contrib.admin import SimpleListFilter
 from Articles.models import Tag
+from django import forms
 
 class TagFilter(SimpleListFilter):
     title = 'tags'
@@ -17,13 +18,14 @@ class TagFilter(SimpleListFilter):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'technologies', 'github_link', 'created_at')
-    search_fields = ('title', 'description', 'technologies')
-    list_filter = ('created_at', TagFilter)
+    list_display = ('title', 'status', 'created_at', 'updated_at')
+    list_filter = ('status', 'categories', 'created_at')
+    search_fields = ('title', 'description')
+    filter_horizontal = ('categories',)
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'description', 'categories')
+            'fields': ('title', 'description', 'categories', 'status')
         }),
         ('Technical Details', {
             'fields': ('technologies', 'github_link')
@@ -61,20 +63,52 @@ class ArticleAdmin(admin.ModelAdmin):
         if 'markdown_file' in form.changed_data:
             obj.save()  # This will trigger the markdown processing in the model
 
+class ResearchAdminForm(forms.ModelForm):
+    CHOICES = (
+        ('pdf', 'PDF File'),
+        ('link', 'External Link'),
+    )
+    file_type = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, required=False, label="Type")
+
+    class Meta:
+        model = Research
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Set initial file_type based on which field is filled
+        if self.instance and self.instance.link:
+            self.fields['file_type'].initial = 'link'
+        else:
+            self.fields['file_type'].initial = 'pdf'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        file_type = cleaned_data.get('file_type')
+        pdf_file = cleaned_data.get('pdf_file')
+        link = cleaned_data.get('link')
+        if file_type == 'pdf' and not pdf_file:
+            self.add_error('pdf_file', 'Please upload a PDF file or switch to link.')
+        if file_type == 'link' and not link:
+            self.add_error('link', 'Please provide a link or switch to PDF upload.')
+        return cleaned_data
+
 @admin.register(Research)
 class ResearchAdmin(admin.ModelAdmin):
-    list_display = ('title', 'published_date', 'created_at')
-    search_fields = ('title', 'abstract')
-    list_filter = ('published_date', 'created_at')
+    form = ResearchAdminForm
+    list_display = ('title', 'status', 'created_at', 'updated_at')
+    list_filter = ('status', 'categories', 'created_at')
+    search_fields = ('title', 'description')
+    filter_horizontal = ('categories',)
     date_hierarchy = 'published_date'
     fieldsets = (
         ('Research Information', {
-            'fields': ('title', 'abstract', 'published_date', 'categories')
-        }),
-        ('File', {
-            'fields': ('pdf_file',)
+            'fields': ('title', 'abstract', 'published_date', 'categories', 'status', 'file_type', 'pdf_file', 'link')
         }),
     )
+
+    class Media:
+        js = ('admin/js/research_filetype.js',)
 
 @admin.register(ProjectCategory)
 class ProjectCategoryAdmin(admin.ModelAdmin):

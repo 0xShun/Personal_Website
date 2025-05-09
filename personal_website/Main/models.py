@@ -25,12 +25,17 @@ class ResearchCategory(models.Model):
 
 
 class Project(models.Model):
-
+    STATUS_CHOICES = [
+        ('ongoing', 'Ongoing'),
+        ('completed', 'Completed'),
+    ]
+    
     title = models.CharField(max_length=200)
     description = models.TextField()
     technologies = models.CharField(max_length=200)
     github_link = models.URLField(blank=True, null=True)
     categories = models.ManyToManyField(ProjectCategory, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ongoing')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -94,12 +99,18 @@ class Article(models.Model):
         ordering = ['-created_at']
 
 class Research(models.Model):
-
+    STATUS_CHOICES = [
+        ('ongoing', 'Ongoing'),
+        ('completed', 'Completed'),
+    ]
+    
     title = models.CharField(max_length=200)
     abstract = models.TextField()
-    pdf_file = models.FileField(upload_to='research_pdfs/')
+    pdf_file = models.FileField(upload_to='research_pdfs/', blank=True, null=True)
+    link = models.URLField(blank=True, null=True)
     published_date = models.DateField()
     categories = models.ManyToManyField(ResearchCategory, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ongoing')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

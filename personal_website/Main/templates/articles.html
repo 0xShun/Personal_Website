@@ -17,9 +17,9 @@
         <div class="notion-callout-icon">🏷️</div>
         <div class="notion-callout-content">
             <div class="notion-buttons">
-                <button class="notion-button active" data-filter="all">All Categories</button>
+                <a href="?" class="notion-button {% if not selected_category %}active{% endif %}" data-filter="all">All Categories</a>
                 {% for category in categories %}
-                    <a href="?category={{ category.id }}" class="notion-button {% if selected_category|default:'' == category.id|stringformat:'s' %}active{% endif %}">{{ category.name }}</a>
+                    <a href="?category={{ category.id }}" class="notion-button {% if selected_category|default:'' == category.id|stringformat:'s' %}active{% endif %}" data-filter="{{ category.name }}">{{ category.name }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -39,7 +39,7 @@
                         <p>{{ article.content_html|truncatewords_html:25|safe }}</p>
                         <div class="notion-metadata">
                             <span><i class="ri-calendar-line"></i> {{ article.created_at|date:"F j, Y" }}</span>
-                            <span class="notion-tag">{% for category in article.categories.all %}{{ category.name }} {% endfor %}</span>
+                            <span class="notion-tag">{% for category in article.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
                         </div>
                         <div class="notion-buttons">
                             <a href="{% url 'article_detail' article.slug %}" class="notion-button">
@@ -68,7 +68,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const articleCards = document.querySelectorAll('.notion-card[data-categories]');
 
     filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (e) => {
+            // Only prevent default if it's not a category link
+            if (!button.getAttribute('href')) {
+                e.preventDefault();
+            }
+            
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 

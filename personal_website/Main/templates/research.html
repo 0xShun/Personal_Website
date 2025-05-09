@@ -39,18 +39,86 @@
         </div>
     </div>
 
+    {% if research_works %}
+        <!-- Ongoing Research -->
+        <div class="notion-block">
+            <h2>Ongoing Research</h2>
+            <div class="notion-grid">
+                {% for research in research_works %}
+                    {% if research.status == 'ongoing' %}
+                        <div class="notion-card" data-categories="{% for category in research.categories.all %}{{ category.name }} {% endfor %}">
+                            <div class="notion-card-icon">
+                                <span class="status-badge ongoing">Ongoing</span>
+                            </div>
+                            <h3>{{ research.title }}</h3>
+                            <p>{{ research.description }}</p>
+                            <div class="notion-tags">
+                                {% for category in research.categories.all %}
+                                    <span class="notion-tag">{{ category.name }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="notion-buttons">
+                                <a href="{% url 'research_detail' research.id %}" class="notion-button">
+                                    <i class="ri-article-line"></i>
+                                    <span>Read More</span>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Completed Research -->
+        <div class="notion-block">
+            <h2>Completed Research</h2>
+            <div class="notion-grid">
+                {% for research in research_works %}
+                    {% if research.status == 'completed' %}
+                        <div class="notion-card" data-categories="{% for category in research.categories.all %}{{ category.name }} {% endfor %}">
+                            <div class="notion-card-icon">
+                                <span class="status-badge completed">Completed</span>
+                            </div>
+                            <h3>{{ research.title }}</h3>
+                            <p>{{ research.description }}</p>
+                            <div class="notion-tags">
+                                {% for category in research.categories.all %}
+                                    <span class="notion-tag">{{ category.name }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="notion-buttons">
+                                <a href="{% url 'research_detail' research.id %}" class="notion-button">
+                                    <i class="ri-article-line"></i>
+                                    <span>Read More</span>
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="notion-callout">
+            <div class="notion-callout-icon">ℹ️</div>
+            <div class="notion-callout-content">
+                <p>No research works available yet. Check back soon!</p>
+            </div>
+        </div>
+    {% endif %}
+
     <!-- Publications -->
     <div class="notion-block">
         <h2>Publications</h2>
         {% if research_list %}
             {% regroup research_list by published_date|date:"Y" as year_list %}
+            <div class="year-dropdowns">
             {% for year in year_list %}
-                <div class="notion-toggle">
-                    <div class="notion-toggle-header">
-                        <span class="notion-toggle-icon">▸</span>
+                <div class="year-dropdown">
+                    <button class="year-dropdown-header" type="button" aria-expanded="false">
+                        <span class="year-arrow">▶</span>
                         <span>{{ year.grouper }}</span>
-                    </div>
-                    <div class="notion-toggle-content">
+                    </button>
+                    <div class="year-dropdown-content" style="display:none;">
                         {% for research in year.list %}
                             <div class="notion-card">
                                 <h3>{{ research.title }}</h3>
@@ -65,12 +133,20 @@
                                             <span>Read Paper</span>
                                         </a>
                                     </div>
+                                {% elif research.link %}
+                                    <div class="notion-buttons">
+                                        <a href="{{ research.link }}" class="notion-button" target="_blank" rel="noopener noreferrer">
+                                            <i class="ri-link"></i>
+                                            <span>View Online</span>
+                                        </a>
+                                    </div>
                                 {% endif %}
                             </div>
                         {% endfor %}
                     </div>
                 </div>
             {% endfor %}
+            </div>
         {% else %}
             <div class="notion-callout">
                 <div class="notion-callout-icon">ℹ️</div>
@@ -131,4 +207,83 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Dropdown for year-grouped publications
+    document.querySelectorAll('.year-dropdown-header').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const content = btn.nextElementSibling;
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', !expanded);
+            if (!expanded) {
+                content.style.display = '';
+                btn.querySelector('.year-arrow').textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                btn.querySelector('.year-arrow').textContent = '▶';
+            }
+        });
+    });
+});
+</script>
+
+<style>
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.status-badge.ongoing {
+    background-color: var(--accent-secondary);
+    color: white;
+}
+
+.status-badge.completed {
+    background-color: var(--accent-primary);
+    color: white;
+}
+
+.year-dropdowns {
+    margin-bottom: 2rem;
+}
+.year-dropdown {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    background: rgba(28, 27, 27, 0.5);
+    border: 1px solid var(--border-light);
+}
+.year-dropdown-header {
+    width: 100%;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.year-dropdown-header:hover {
+    background: rgba(28, 27, 27, 0.8);
+}
+.year-arrow {
+    display: inline-block;
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+}
+.year-dropdown-content {
+    padding: 1rem 2rem 1.5rem 2.5rem;
+    border-top: 1px solid var(--border-light);
+    background: rgba(0,0,0,0.05);
+}
+</style>
 {% endblock %} 
