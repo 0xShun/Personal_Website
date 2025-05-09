@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, Article, Research
+from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory
 from django.contrib.admin import SimpleListFilter
 from Articles.models import Tag
 
@@ -23,7 +23,7 @@ class ProjectAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'description')
+            'fields': ('title', 'description', 'category')
         }),
         ('Technical Details', {
             'fields': ('technologies', 'github_link')
@@ -41,7 +41,7 @@ class ArticleAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Article Information', {
-            'fields': ('title', 'slug')
+            'fields': ('title', 'slug', 'category')
         }),
         ('Content', {
             'fields': ('markdown_file',),
@@ -69,9 +69,21 @@ class ResearchAdmin(admin.ModelAdmin):
     date_hierarchy = 'published_date'
     fieldsets = (
         ('Research Information', {
-            'fields': ('title', 'abstract', 'published_date')
+            'fields': ('title', 'abstract', 'published_date', 'category')
         }),
         ('File', {
             'fields': ('pdf_file',)
         }),
     )
+
+@admin.register(ProjectCategory)
+class ProjectCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+@admin.register(ArticleCategory)
+class ArticleCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+@admin.register(ResearchCategory)
+class ResearchCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)

@@ -3,25 +3,34 @@ from django.utils import timezone
 import markdown
 from django.utils.text import slugify
 from django.core.files.storage import default_storage
-import os
-from Articles.models import Tag
+import os   
+
+class ProjectCategory(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class ArticleCategory(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class ResearchCategory(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
 
 class Project(models.Model):
-    CATEGORY_CHOICES = [
-        ('web', 'Web Development'),
-        ('mobile', 'Mobile Apps'),
-        ('ai', 'AI/ML'),
-    ]
 
     title = models.CharField(max_length=200)
     description = models.TextField()
     technologies = models.CharField(max_length=200)
     github_link = models.URLField(blank=True, null=True)
-    category = models.CharField(
-        max_length=20,
-        choices=CATEGORY_CHOICES,
-        default='web'
-    )
+    category = models.ForeignKey(ProjectCategory, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -32,19 +41,10 @@ class Project(models.Model):
         ordering = ['-created_at']
 
 class Article(models.Model):
-    CATEGORY_CHOICES = [
-        ('tutorial', 'Tutorials'),
-        ('tech', 'Tech Reviews'),
-        ('opinion', 'Opinion Pieces'),
-    ]
 
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
-    category = models.CharField(
-        max_length=20,
-        choices=CATEGORY_CHOICES,
-        default='tutorial'
-    )
+    category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True, blank=True)
     markdown_file = models.FileField(
         upload_to='articles/markdown/',
         help_text="Upload a Markdown (.md) file",
@@ -94,21 +94,12 @@ class Article(models.Model):
         ordering = ['-created_at']
 
 class Research(models.Model):
-    CATEGORY_CHOICES = [
-        ('science', 'Science'),
-        ('technology', 'Technology'),
-        ('engineering', 'Engineering'),
-    ]
 
     title = models.CharField(max_length=200)
     abstract = models.TextField()
     pdf_file = models.FileField(upload_to='research_pdfs/')
     published_date = models.DateField()
-    category = models.CharField(
-        max_length=20,
-        choices=CATEGORY_CHOICES,
-        default='science'
-    )
+    category = models.ForeignKey(ResearchCategory, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -118,3 +109,5 @@ class Research(models.Model):
     class Meta:
         ordering = ['-published_date']
         verbose_name_plural = "Research"
+
+
