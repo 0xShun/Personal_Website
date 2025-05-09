@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory
+from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage
 from django.contrib.admin import SimpleListFilter
 from Articles.models import Tag
 
@@ -23,7 +23,7 @@ class ProjectAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Basic Information', {
-            'fields': ('title', 'description', 'category')
+            'fields': ('title', 'description', 'categories')
         }),
         ('Technical Details', {
             'fields': ('technologies', 'github_link')
@@ -41,7 +41,7 @@ class ArticleAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Article Information', {
-            'fields': ('title', 'slug', 'category')
+            'fields': ('title', 'slug', 'categories')
         }),
         ('Content', {
             'fields': ('markdown_file',),
@@ -69,7 +69,7 @@ class ResearchAdmin(admin.ModelAdmin):
     date_hierarchy = 'published_date'
     fieldsets = (
         ('Research Information', {
-            'fields': ('title', 'abstract', 'published_date', 'category')
+            'fields': ('title', 'abstract', 'published_date', 'categories')
         }),
         ('File', {
             'fields': ('pdf_file',)
@@ -87,3 +87,8 @@ class ArticleCategoryAdmin(admin.ModelAdmin):
 @admin.register(ResearchCategory)
 class ResearchCategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
+
+@admin.register(CarouselImage)
+class CarouselImageAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'order')
+    ordering = ('order',)

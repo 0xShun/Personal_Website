@@ -30,7 +30,7 @@ class Project(models.Model):
     description = models.TextField()
     technologies = models.CharField(max_length=200)
     github_link = models.URLField(blank=True, null=True)
-    category = models.ForeignKey(ProjectCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    categories = models.ManyToManyField(ProjectCategory, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -44,7 +44,7 @@ class Article(models.Model):
 
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
-    category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    categories = models.ManyToManyField(ArticleCategory, blank=True)
     markdown_file = models.FileField(
         upload_to='articles/markdown/',
         help_text="Upload a Markdown (.md) file",
@@ -99,7 +99,7 @@ class Research(models.Model):
     abstract = models.TextField()
     pdf_file = models.FileField(upload_to='research_pdfs/')
     published_date = models.DateField()
-    category = models.ForeignKey(ResearchCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    categories = models.ManyToManyField(ResearchCategory, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -109,5 +109,14 @@ class Research(models.Model):
     class Meta:
         ordering = ['-published_date']
         verbose_name_plural = "Research"
+
+class CarouselImage(models.Model):
+    image = models.ImageField(upload_to='carousel/')
+    title = models.CharField(max_length=100, blank=True)
+    caption = models.TextField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.title or f"Carousel Image {self.pk}"
 
 

@@ -6,7 +6,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.crypto import get_random_string
 from django.core.cache import cache
-from .models import Project, Research, Article
+from .models import Project, Research, Article, ArticleCategory, ProjectCategory, ResearchCategory, CarouselImage
 import os
 from django.conf import settings
 import logging
@@ -29,8 +29,10 @@ def home(request):
     
     logger.info("Static file paths checked:\n" + "\n".join(logo_paths))
     
+    images = CarouselImage.objects.order_by('order')
     context = {
-        'title': 'Home'
+        'title': 'Home',
+        'carousel_images': images,
     }
     return render(request, 'home.html', context)
 
@@ -221,20 +223,35 @@ def add_article(request):
     return redirect('admin_dashboard')
 
 def projects(request):
-    projects = Project.objects.all()
-    return render(request, 'projects.html', {'projects': projects})
+    category_filter = request.GET.get('category')
+    if category_filter:
+        projects = Project.objects.filter(categories__id=category_filter)
+    else:
+        projects = Project.objects.all()
+    categories = ProjectCategory.objects.all()
+    return render(request, 'projects.html', {'projects': projects, 'categories': categories, 'selected_category': category_filter})
 
 def research(request):
-    research_list = Research.objects.all()
-    return render(request, 'research.html', {'research_list': research_list})
+    category_filter = request.GET.get('category')
+    if category_filter:
+        research_list = Research.objects.filter(categories__id=category_filter)
+    else:
+        research_list = Research.objects.all()
+    categories = ResearchCategory.objects.all()
+    return render(request, 'research.html', {'research_list': research_list, 'categories': categories, 'selected_category': category_filter})
 
 def research_detail(request, pk):
     research = get_object_or_404(Research, pk=pk)
     return render(request, 'research_detail.html', {'research': research})
 
 def articles(request):
-    articles = Article.objects.all()
-    return render(request, 'articles.html', {'articles': articles})
+    category_filter = request.GET.get('category')
+    if category_filter:
+        articles = Article.objects.filter(categories__id=category_filter)
+    else:
+        articles = Article.objects.all()
+    categories = ArticleCategory.objects.all()
+    return render(request, 'articles.html', {'articles': articles, 'categories': categories, 'selected_category': category_filter})
 
 def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug)

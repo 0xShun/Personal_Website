@@ -14,7 +14,7 @@
             </div>
             <div class="typing-container">
                 <pre id="typewriter">
-<span class="keyword">class</span> <span class="class-name">Developer</span>:
+<span class="keyword">class</span> <span class="class-name">Researcher</span>:
     <span class="keyword">def</span> <span class="function">__init__</span>(self):
         self.name = <span class="string-highlight">"Shawn Michael Sudaria"</span>
         self.research_group = <span class="string-highlight">"Excelr8 Labs"</span>
@@ -22,13 +22,10 @@
             <span class="string-highlight">"Data Analyst"</span>,
             <span class="string-highlight">"Data Engineer"</span>,
             <span class="string-highlight">"Security Researcher"</span>
+            <span class="string-highlight">"Software Engineer"</span>
         ]
             </div>
         </div>
-        <!-- <div class="header-content">
-            <h1>Shawn Michael Sudaria</h1>
-            <div class="notion-block notion-text">Software Engineer & Researcher</div>
-        </div> -->
     </div>
 
     <!-- About Me Section -->
@@ -63,24 +60,40 @@
         </div>
     </div>
 
-    <!-- Featured Section -->
+    <!-- Carousel Section -->
+    {% if carousel_images %}
     <div class="notion-block">
-        <h2>Featured Work</h2>
-        <div class="notion-toggle">
-            <div class="notion-toggle-header">
-                <span class="notion-toggle-icon">▸</span>
-                <span>Latest Project: Portfolio Website</span>
-            </div>
-            <div class="notion-toggle-content">
-                <p>A personal portfolio website built with Django and styled like Notion.</p>
-                <ul class="notion-list">
-                    <li class="notion-list-item">Notion-like UI/UX</li>
-                    <li class="notion-list-item">Responsive design</li>
-                    <li class="notion-list-item">Dark mode support</li>
-                </ul>
-            </div>
+        <h2>Gallery 📸</h2>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000" style="max-width:700px; margin:0 auto;">
+          <div class="carousel-indicators">
+            {% for image in carousel_images %}
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
+            {% endfor %}
+          </div>
+          <div class="carousel-inner" style="width:700px; height:400px;">
+            {% for image in carousel_images %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}" style="width:700px; height:400px;">
+                <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ image.title }}" style="width:700px; height:400px; object-fit:cover; background:#222; border-radius:12px;">
+                {% if image.title or image.caption %}
+                <div class="carousel-caption d-none d-md-block">
+                  {% if image.title %}<h5>{{ image.title }}</h5>{% endif %}
+                  {% if image.caption %}<p>{{ image.caption }}</p>{% endif %}
+                </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
     </div>
+    {% endif %}
 
     <!-- Skills Section -->
     <div class="notion-block">

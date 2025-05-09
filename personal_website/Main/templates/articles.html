@@ -12,14 +12,14 @@
         <div class="notion-block notion-text">Thoughts, tutorials, and technical writings</div>
     </div>
 
-    <!-- Article Tags -->
+    <!-- Article Categories -->
     <div class="notion-callout">
         <div class="notion-callout-icon">🏷️</div>
         <div class="notion-callout-content">
             <div class="notion-buttons">
-                <button class="notion-button active" data-filter="all">All Tags</button>
-                {% for tag in tags %}
-                    <button class="notion-button" data-filter="{{ tag.name }}">{{ tag.name }}</button>
+                <button class="notion-button active" data-filter="all">All Categories</button>
+                {% for category in categories %}
+                    <a href="?category={{ category.id }}" class="notion-button {% if selected_category|default:'' == category.id|stringformat:'s' %}active{% endif %}">{{ category.name }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -31,7 +31,7 @@
             <h2>Latest Articles</h2>
             <div class="notion-grid">
                 {% for article in articles %}
-                    <div class="notion-card" data-tags="{% for tag in article.tags.all %}{{ tag.name }} {% endfor %}">
+                    <div class="notion-card" data-categories="{% for category in article.categories.all %}{{ category.name }} {% endfor %}">
                         <div class="notion-card-icon">
                             <!-- Add any icon logic if needed -->
                         </div>
@@ -39,7 +39,7 @@
                         <p>{{ article.content_html|truncatewords_html:25|safe }}</p>
                         <div class="notion-metadata">
                             <span><i class="ri-calendar-line"></i> {{ article.created_at|date:"F j, Y" }}</span>
-                            <span class="notion-tag">{% for tag in article.tags.all %}{{ tag.name }} {% endfor %}</span>
+                            <span class="notion-tag">{% for category in article.categories.all %}{{ category.name }} {% endfor %}</span>
                         </div>
                         <div class="notion-buttons">
                             <a href="{% url 'article_detail' article.slug %}" class="notion-button">
@@ -65,7 +65,7 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('[data-filter]');
-    const articleCards = document.querySelectorAll('.notion-card[data-tags]');
+    const articleCards = document.querySelectorAll('.notion-card[data-categories]');
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -74,8 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const filter = button.getAttribute('data-filter');
             articleCards.forEach(card => {
-                const tags = card.getAttribute('data-tags').split(' ');
-                if (filter === 'all' || tags.includes(filter)) {
+                const categories = card.getAttribute('data-categories').split(' ');
+                if (filter === 'all' || categories.includes(filter)) {
                     card.style.display = '';
                 } else {
                     card.style.display = 'none';

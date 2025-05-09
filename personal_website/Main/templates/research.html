@@ -12,6 +12,19 @@
         <div class="notion-block notion-text">Exploring the frontiers of technology through academic research</div>
     </div>
 
+    <!-- Research Category Filter -->
+    <div class="notion-callout">
+        <div class="notion-callout-icon">🏷️</div>
+        <div class="notion-callout-content">
+            <div class="notion-buttons">
+                <a href="?" class="notion-button {% if not selected_category %}active{% endif %}">All</a>
+                {% for category in categories %}
+                    <a href="?category={{ category.id }}" class="notion-button {% if selected_category|default:'' == category.id|stringformat:'s' %}active{% endif %}">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
     <!-- Research Areas -->
     <div class="notion-callout">
         <div class="notion-callout-icon">🔬</div>
