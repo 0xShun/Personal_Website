@@ -25,9 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-qrungk@u+j77y@*1w=hmnx758n@cc4c!4-w^@eqhs9*#wz551=')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else []
+ALLOWED_HOSTS = [
+    'personal-website-debug.onrender.com',
+    'ecsg-ctf.fun',
+    'www.ecsg-ctf.fun',
+    'shun-80m6.onrender.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -43,6 +50,8 @@ INSTALLED_APPS = [
     'Articles',
     'Projects',
     'Research',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -131,11 +140,11 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images) configuration
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'Main/static'),
 ]
-STATIC_ROOT = os.environ.get('STATIC_ROOT', '/static')
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Logging configuration
@@ -170,15 +179,36 @@ LOGGING = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = '/media/'  # URL for accessing media files
-MEDIA_ROOT = os.environ.get('MEDIA_ROOT', '/media')  # Path where media files are stored
+MEDIA_URL = 'https://res.cloudinary.com/dkpfccgvq/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path where media files are stored
 
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = '****@gmail.com'  # Your Gmail address
-EMAIL_HOST_PASSWORD = '*********!'  # Your Gmail app password
-DEFAULT_FROM_EMAIL = '****@gmail.com'
-CONTACT_EMAIL = '****@gmail.com'
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', '')
+CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', '')
+
+# Security settings
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dkpfccgvq',
+    'API_KEY': '415448311587419',
+    'API_SECRET': 'JPxNK1Z6qLzMX2pIGU5uawKEnTM'
+}

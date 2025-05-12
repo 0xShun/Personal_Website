@@ -4,7 +4,9 @@
 *.pyc
 __pycache__
 db.sqlite3
+db.sqlite3-journal
 media
+staticfiles/
 
 # Backup files # 
 *.bak 
@@ -48,9 +50,9 @@ atlassian-ide-plugin.xml
 # Python # 
 *.py[cod] 
 *$py.class 
-
-# Distribution / packaging 
-.Python build/ 
+*.so
+.Python
+build/
 develop-eggs/ 
 dist/ 
 downloads/ 
@@ -135,3 +137,13 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

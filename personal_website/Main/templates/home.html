@@ -73,7 +73,7 @@
           <div class="carousel-inner" style="width:700px; height:400px;">
             {% for image in carousel_images %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}" style="width:700px; height:400px;">
-                <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ image.title }}" style="width:700px; height:400px; object-fit:cover; background:#222; border-radius:12px;">
+                <img src="{{ image.image_url }}" class="d-block w-100" alt="{{ image.title }}" style="width:700px; height:400px; object-fit:cover; background:#222; border-radius:12px;">
                 {% if image.title or image.caption %}
                 <div class="carousel-caption d-none d-md-block">
                   {% if image.title %}<h5>{{ image.title }}</h5>{% endif %}
