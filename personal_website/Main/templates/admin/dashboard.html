@@ -1,3 +1,6 @@
+{% include 'admin/base_admin_css.html' %}
+{% include 'admin/dashboard_admin_css.html' %}
+
 {% extends 'base.html' %}
 
 {% block title %}Admin Dashboard{% endblock %}
@@ -83,27 +86,4 @@
         </div>
     </div>
 </div>
-
-<style>
-.admin-form .notion-input {
-    background: rgba(28, 27, 27, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--border-light);
-    color: var(--text-primary);
-    padding: 12px;
-    transition: all 0.3s ease;
-}
-
-.admin-form .notion-input:focus {
-    border-color: var(--accent-secondary);
-    box-shadow: 0 0 0 2px rgba(225, 98, 89, 0.2);
-}
-
-.admin-form .form-label {
-    color: var(--text-primary);
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-</style>
 {% endblock %} 

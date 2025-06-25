@@ -122,7 +122,7 @@ class Research(models.Model):
         verbose_name_plural = "Research"
 
 class CarouselImage(models.Model):
-    image_url = models.URLField("Image URL", max_length=500)
+    image = models.ImageField(upload_to="carousel/")
     title = models.CharField(max_length=100, blank=True)
     caption = models.TextField(blank=True)
     order = models.PositiveIntegerField(default=0)

@@ -13,7 +13,8 @@
     <!-- Remixicon -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/notion.css' %}">
+    {# <link rel="stylesheet" href="{% static 'css/notion.css' %}"> #}
+    {% include "partials/notion_css.html" %}
     
     <style>
         body {
@@ -26,7 +27,7 @@
     <!-- Navbar -->
     <nav class="notion-nav">
         <a href="{% url 'home' %}" class="notion-nav-brand">
-            <img src="{% static 'images/logonav.png' %}" alt="Logo" class="notion-nav-logo">
+            <img src="https://i.imgur.com/Do9wmQO.png" alt="Logo" class="notion-nav-logo">
         </a>
         <div class="notion-nav-right">
             <button id="sidebar-toggle" class="notion-button">
