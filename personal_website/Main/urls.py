@@ -11,4 +11,5 @@ urlpatterns = [
     path('research/<int:pk>/', views.research_detail, name='research_detail'),
     path('articles/', views.articles, name='articles'),
     path('article/<slug:slug>/', views.article_detail, name='article_detail'),
+    path('login/', views.login_view, name='login'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

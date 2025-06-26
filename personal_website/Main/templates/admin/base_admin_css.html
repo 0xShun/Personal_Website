@@ -11,7 +11,6 @@ html[data-theme="light"],
     --body-fg: #333;
     --body-bg: #fff;
     --body-quiet-color: #666;
-    --body-medium-color: #444;
     --body-loud-color: #000;
     --header-color: #ffc;
     --header-branding-color: var(--accent);
@@ -19,10 +18,10 @@ html[data-theme="light"],
     --header-link-color: var(--primary-fg);
     --breadcrumbs-fg: #c4dce8;
     --breadcrumbs-link-fg: var(--body-bg);
-    --breadcrumbs-bg: #264b5d;
+    --breadcrumbs-bg: var(--primary);
     --link-fg: #417893;
     --link-hover-color: #036;
-    --link-selected-fg: var(--secondary);
+    --link-selected-fg: #5b80b2;
     --hairline-color: #e8e8e8;
     --border-color: #ccc;
     --error-fg: #ba2121;
@@ -33,10 +32,10 @@ html[data-theme="light"],
     --selected-bg: #e4e4e4; /* E.g. selected table cells */
     --selected-row: #ffc;
     --button-fg: #fff;
-    --button-bg: var(--secondary);
-    --button-hover-bg: #205067;
-    --default-button-bg: #205067;
-    --default-button-hover-bg: var(--secondary);
+    --button-bg: var(--primary);
+    --button-hover-bg: #609ab6;
+    --default-button-bg: var(--secondary);
+    --default-button-hover-bg: #205067;
     --close-button-bg: #747474;
     --close-button-hover-bg: #333;
     --delete-button-bg: #ba2121;
@@ -45,6 +44,8 @@ html[data-theme="light"],
     --object-tools-bg: var(--close-button-bg);
     --object-tools-hover-bg: var(--close-button-hover-bg);
     --font-family-primary:
+        -apple-system,
+        BlinkMacSystemFont,
         "Segoe UI",
         system-ui,
         Roboto,
@@ -73,7 +74,6 @@ html[data-theme="light"],
         "Segoe UI Emoji",
         "Segoe UI Symbol",
         "Noto Color Emoji";
-    color-scheme: light;
 }
-// ... rest of base.css from lines 51 to 1184 ...
+// ... rest of base.css from lines 51 to 1139 ...
 </style> 

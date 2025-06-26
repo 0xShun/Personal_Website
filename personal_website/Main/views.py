@@ -12,6 +12,8 @@ from django.conf import settings
 import logging
 from django.urls import reverse
 from django.core.mail import send_mail
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import TemplateView
 
 logger = logging.getLogger(__name__)
 
@@ -167,10 +169,6 @@ def admin(request):
         'title': 'Admin Dashboard'
     }
     return render(request, 'admin.html', context)
-
-@login_required(login_url='/gwapo_login')
-def admin_dashboard(request):
-    return render(request, 'admin/dashboard.html')
 
 def admin_login(request):
     if request.method == 'POST':
