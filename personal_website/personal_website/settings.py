@@ -42,7 +42,7 @@ SECRET_KEY = env_vars.get('DJANGO_SECRET_KEY', 'django-insecure-1234567890')
 DEBUG = env_vars.get('DEBUG', 'False') == 'True'
 
 # Allowed hosts - add domains for your deployment platforms
-ALLOWED_HOSTS = env_vars.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,www.shun.uno,shun.uno,*.pythonanywhere.com,*.render.com,*.onrender.com').split(',')
+ALLOWED_HOSTS = env_vars.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,www.shun.uno,shun.uno,*.pythonanywhere.com,*.render.com,*.onrender.com,personal-website-io48.onrender.com').split(',')
 
 # Security settings for production
 if not DEBUG:
