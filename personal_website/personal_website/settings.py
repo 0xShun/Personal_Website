@@ -14,7 +14,10 @@ from pathlib import Path
 import os
 import sys
 import dj_database_url
-from dotenv import dotenv_values
+from dotenv import dotenv_values, load_dotenv
+
+# Load dotenv in case environment variables are stored there
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,11 +26,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# Load environment variables from .env.local for local development if it exists
+# Load environment variables from .env files or use system environment variables
 if os.path.exists(os.path.join(BASE_DIR, '.env.local')):
     env_vars = dotenv_values(os.path.join(BASE_DIR, '.env.local'))
-else:
+elif os.path.exists(os.path.join(BASE_DIR, '.env')):
     env_vars = dotenv_values(os.path.join(BASE_DIR, '.env'))
+else:
+    # If no .env file is found, use os.environ as fallback
+    env_vars = os.environ
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env_vars.get('DJANGO_SECRET_KEY', 'django-insecure-1234567890')
@@ -35,8 +41,8 @@ SECRET_KEY = env_vars.get('DJANGO_SECRET_KEY', 'django-insecure-1234567890')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env_vars.get('DEBUG', 'False') == 'True'
 
-# Allowed hosts - add your PythonAnywhere domain
-ALLOWED_HOSTS = env_vars.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,www.shun.uno,shun.uno,*.pythonanywhere.com').split(',')
+# Allowed hosts - add domains for your deployment platforms
+ALLOWED_HOSTS = env_vars.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,www.shun.uno,shun.uno,*.pythonanywhere.com,*.render.com,*.onrender.com').split(',')
 
 # Security settings for production
 if not DEBUG:
@@ -107,8 +113,11 @@ WSGI_APPLICATION = 'personal_website.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Use SQLite for local development, PostgreSQL for production
-if env_vars.get('DEBUG', 'False') == 'True':
+# Database configuration - works with SQLite or PostgreSQL
+USE_SQLITE = env_vars.get('USE_SQLITE', 'False').lower() == 'true'
+
+if USE_SQLITE:
+    # For SQLite (local development or Render with volume)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -116,8 +125,12 @@ if env_vars.get('DEBUG', 'False') == 'True':
         }
     }
 else:
+    # For PostgreSQL or other database systems via DATABASE_URL
     DATABASES = {
-        'default': dj_database_url.config(default=env_vars.get('DATABASE_URL'))
+        'default': dj_database_url.config(
+            default=env_vars.get('DATABASE_URL'),
+            conn_max_age=600
+        )
     }
 
 
@@ -174,14 +187,21 @@ LOGGING = {
     },
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Media and file storage configuration
+MEDIA_URL = env_vars.get('MEDIA_URL', '/media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, env_vars.get('MEDIA_ROOT', 'media'))
 
-# Cloudinary settings
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env_vars.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': env_vars.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': env_vars.get('CLOUDINARY_API_SECRET'),
-}
+# Use Cloudinary only if configured
+USE_CLOUDINARY = env_vars.get('USE_CLOUDINARY', 'True').lower() == 'true'
+
+if USE_CLOUDINARY:
+    # Cloudinary settings for media storage
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': env_vars.get('CLOUDINARY_CLOUD_NAME'),
+        'API_KEY': env_vars.get('CLOUDINARY_API_KEY'),
+        'API_SECRET': env_vars.get('CLOUDINARY_API_SECRET'),
+    }
 
 # Contact email
 CONTACT_EMAIL = env_vars.get('CONTACT_EMAIL', 'shawnmichael.sudaria04@gmail.com')

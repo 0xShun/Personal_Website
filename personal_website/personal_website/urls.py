@@ -37,8 +37,8 @@ urlpatterns = [
     path('research/', include('Research.urls')),
 ]
 
-# Serve media files in production
-if not settings.DEBUG:
+# Serve media files in production if not using Cloudinary
+if not settings.DEBUG and not getattr(settings, 'USE_CLOUDINARY', True):
     urlpatterns += [
         re_path(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT,
