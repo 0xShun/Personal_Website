@@ -7,7 +7,7 @@ import os
 import sys
 
 # Add your project directory to the sys.path
-path = '/home/yourusername/Personal_Website/personal_website'
+path = '/home/Shun/Personal_Website/personal_website'
 if path not in sys.path:
     sys.path.append(path)
 
@@ -16,7 +16,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'personal_website.settings'
 
 # Import dotenv and load environment variables
 from dotenv import load_dotenv
-project_folder = os.path.expanduser('/home/yourusername/Personal_Website/personal_website')
+project_folder = os.path.expanduser('/home/Shun/Personal_Website/personal_website')
 load_dotenv(os.path.join(project_folder, '.env'))
 
 # Set up Django
