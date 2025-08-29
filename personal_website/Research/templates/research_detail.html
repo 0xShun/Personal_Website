@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ paper.title }} | Shawn Michael Sudaria{% endblock %}
+
+{% block content %}
+<div class="notion-page container-fluid px-2 px-md-5">
+    <!-- Back Button -->
+    <div class="notion-back-link mb-3">
+        <a href="{% url 'research' %}" class="notion-link">
+            <i class="ri-arrow-left-line"></i> Back to Research
+        </a>
+    </div>
+
+    <!-- Paper Header -->
+    <div class="notion-page-header">
+        <div class="notion-page-icon">📝</div>
+        <h1><b>{{ paper.title }}</b></h1>
+        <div class="notion-block notion-text">
+            Published: {{ paper.publication_date|date:"F Y" }}
+        </div>
+    </div>
+
+    <!-- Paper Details -->
+    <div class="notion-block">
+        <div class="notion-callout">
+            <div class="notion-callout-content">
+                <p><strong>Authors:</strong> {{ paper.authors }}</p>
+                <p><strong>Journal/Conference:</strong> {{ paper.venue }}</p>
+                {% if paper.doi %}
+                    <p><strong>DOI:</strong> <a href="https://doi.org/{{ paper.doi }}" target="_blank" rel="noopener noreferrer">{{ paper.doi }}</a></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Abstract -->
+        <h2>Abstract</h2>
+        <div class="notion-text-content">
+            {{ paper.abstract|safe }}
+        </div>
+
+        <!-- Paper Content -->
+        <div class="notion-text-content">
+            {{ paper.content|safe }}
+        </div>
+
+        <!-- Paper Links -->
+        <div class="notion-buttons mt-4">
+            {% if paper.pdf_file %}
+                <a href="{{ paper.pdf_file.url }}" class="notion-button" target="_blank" rel="noopener noreferrer">
+                    <i class="ri-file-pdf-line"></i>
+                    <span>PDF</span>
+                </a>
+            {% endif %}
+            {% if paper.url %}
+                <a href="{{ paper.url }}" class="notion-button" target="_blank" rel="noopener noreferrer">
+                    <i class="ri-external-link-line"></i>
+                    <span>Publisher Link</span>
+                </a>
+            {% endif %}
+            {% if paper.code_url %}
+                <a href="{{ paper.code_url }}" class="notion-button" target="_blank" rel="noopener noreferrer">
+                    <i class="ri-github-line"></i>
+                    <span>Code</span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="notion-block mt-5">
+        <h2>Comments</h2>
+        
+        <!-- Existing Comments -->
+        <div class="notion-comments">
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="notion-comment">
+                        <div class="notion-comment-header">
+                            <div class="notion-comment-author">
+                                {{ comment.name }}
+                                {% if comment.website %}
+                                    <a href="{{ comment.website }}" target="_blank" rel="noopener noreferrer">
+                                        <i class="ri-link"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="notion-comment-date">{{ comment.created_at|date:"F j, Y" }}</div>
+                        </div>
+                        <div class="notion-comment-content">
+                            {{ comment.content|safe }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="notion-callout">
+                    <div class="notion-callout-content">
+                        <p>Be the first to comment on this research paper!</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Comment Form -->
+        <div class="notion-comment-form mt-4">
+            <h3>Leave a Comment</h3>
+            <form method="post" action="{% url 'post_comment' 'research' paper.id %}">
+                {% csrf_token %}
+                
+                <div class="form-group mb-3">
+                    <label for="id_name">Name</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <div class="invalid-feedback d-block">{{ form.name.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="id_email">Email (will not be published)</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="invalid-feedback d-block">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="id_website">Website (optional)</label>
+                    {{ form.website }}
+                    {% if form.website.errors %}
+                        <div class="invalid-feedback d-block">{{ form.website.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="id_content">Comment</label>
+                    {{ form.content }}
+                    {% if form.content.errors %}
+                        <div class="invalid-feedback d-block">{{ form.content.errors }}</div>
+                    {% endif %}
+                </div>
+
+                {{ form.honeypot }}
+                
+                <button type="submit" class="notion-button mt-3">
+                    <i class="ri-send-plane-line"></i>
+                    <span>Submit Comment</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.notion-comment {
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+.notion-comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.notion-comment-author {
+    font-weight: 600;
+}
+
+.notion-comment-date {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+.notion-comment-content {
+    line-height: 1.5;
+}
+
+.notion-comment-form input,
+.notion-comment-form textarea {
+    width: 100%;
+    padding: 8px 12px;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-primary);
+}
+
+.notion-comment-form textarea {
+    min-height: 120px;
+}
+
+.notion-back-link {
+    display: inline-block;
+    margin-bottom: 16px;
+}
+</style>
+{% endblock %}

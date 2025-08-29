@@ -4,22 +4,16 @@
 {% block title %}Projects | Shawn Michael Sudaria{% endblock %}
 
 {% block content %}
-<div class="notion-page">
-    <!-- Page Cover with Fallback -->
-    <div class="notion-page-cover">
-        <div class="notion-cover-gradient"></div>
-    </div>
-
+<div class="notion-page container-fluid px-2 px-md-5">
     <!-- Page Header -->
     <div class="notion-page-header">
         <div class="notion-page-icon">📂</div>
-        <h1>Projects</h1>
+        <h1><b>Projects</b></h1>
         <div class="notion-block notion-text">A collection of my technical projects and experiments</div>
     </div>
 
     <!-- Project Filters -->
     <div class="notion-callout">
-        <div class="notion-callout-icon">🔍</div>
         <div class="notion-callout-content">
             <div class="notion-buttons">
                 <a href="?" class="notion-button {% if not selected_category %}active{% endif %}">All</a>
@@ -39,9 +33,6 @@
                 {% for project in projects %}
                     {% if project.status == 'ongoing' %}
                         <div class="notion-card" data-categories="{% for category in project.categories.all %}{{ category.name }} {% endfor %}">
-                            <div class="notion-card-icon">
-                                <span class="status-badge ongoing">Ongoing</span>
-                            </div>
                             <h3>{{ project.title }}</h3>
                             <p>{{ project.description }}</p>
                             <div class="notion-tags">
@@ -50,6 +41,10 @@
                                 {% endfor %}
                             </div>
                             <div class="notion-buttons">
+                                <a href="{% url 'project_detail' project.id %}" class="notion-button">
+                                    <i class="ri-file-text-line"></i>
+                                    <span>Details & Comments</span>
+                                </a>
                                 {% if project.github_link %}
                                     <a href="{{ project.github_link }}" class="notion-button" target="_blank" rel="noopener noreferrer">
                                         <i class="ri-github-line"></i>
@@ -64,15 +59,12 @@
         </div>
 
         <!-- Completed Projects -->
-        <div class="notion-block">
+            <div class="notion-block">
             <h2>Completed Projects</h2>
-            <div class="notion-grid">
+            <div class="notion-grid notion-grid-single">
                 {% for project in projects %}
                     {% if project.status == 'completed' %}
                         <div class="notion-card" data-categories="{% for category in project.categories.all %}{{ category.name }} {% endfor %}">
-                            <div class="notion-card-icon">
-                                <span class="status-badge completed">Completed</span>
-                            </div>
                             <h3>{{ project.title }}</h3>
                             <p>{{ project.description }}</p>
                             <div class="notion-tags">
@@ -81,6 +73,10 @@
                                 {% endfor %}
                             </div>
                             <div class="notion-buttons">
+                                <a href="{% url 'project_detail' project.id %}" class="notion-button">
+                                    <i class="ri-file-text-line"></i>
+                                    <span>Details & Comments</span>
+                                </a>
                                 {% if project.github_link %}
                                     <a href="{{ project.github_link }}" class="notion-button" target="_blank" rel="noopener noreferrer">
                                         <i class="ri-github-line"></i>
@@ -95,23 +91,11 @@
         </div>
     {% else %}
         <div class="notion-callout">
-            <div class="notion-callout-icon">ℹ️</div>
             <div class="notion-callout-content">
                 <p>No projects available yet. Check back soon!</p>
             </div>
         </div>
     {% endif %}
-
-    <!-- Contribution Graph -->
-    <div class="notion-block">
-        <h2>Contribution Activity</h2>
-        <div class="notion-callout">
-            <div class="notion-callout-icon">📊</div>
-            <div class="notion-callout-content">
-                <img src="https://github-readme-activity-graph.vercel.app/graph?username=0xShun&theme=high-contrast&hide_border=true&hide_title=true&area=true&custom_title=Total%20contribution%20graph%20in%20all%20repo&bg_color=0a0a0a&color=2edcd9&title_color=2edcd9&point=2edcd9&line=2edcd9" width="95%" alt="activity graph">
-            </div>
-        </div>
-    </div>
 </div>
 
 <!-- Project Filter JavaScript -->
@@ -158,6 +142,15 @@ document.addEventListener('DOMContentLoaded', function() {
 .status-badge.completed {
     background-color: var(--accent-primary);
     color: white;
+}
+
+.notion-grid-single {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px;
+}
+.notion-grid-single > .notion-card {
+    width: 100%;
 }
 </style>
 {% endblock %} 

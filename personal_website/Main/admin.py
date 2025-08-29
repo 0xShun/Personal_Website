@@ -1,8 +1,10 @@
 from django.contrib import admin
-from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage
+from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage, Comment
 from django.contrib.admin import SimpleListFilter
 from Articles.models import Tag
 from django import forms
+from django.contrib.auth.models import User, Group
+from .admin_site import custom_admin_site
 
 class TagFilter(SimpleListFilter):
     title = 'tags'
@@ -124,5 +126,30 @@ class ResearchCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(CarouselImage)
 class CarouselImageAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'order')
+    list_display = ('__str__', 'order', 'image_preview')
     ordering = ('order',)
+    readonly_fields = ('image_preview',)
+    fields = ('image_url', 'title', 'caption', 'order', 'image_preview')
+
+    def image_preview(self, obj):
+        if obj.image_url:
+            return f'<img src="{obj.image_url}" style="max-height:60px; max-width:120px; border-radius:6px;" />'
+        return ""
+    image_preview.allow_tags = True
+    image_preview.short_description = "Preview"
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('name', 'content_type', 'object_id', 'created_at', 'is_approved')
+    list_filter = ('content_type', 'is_approved', 'created_at')
+    search_fields = ('name', 'email', 'content')
+    readonly_fields = ('ip_address',)
+    actions = ['approve_comments', 'reject_comments']
+    
+    def approve_comments(self, request, queryset):
+        queryset.update(is_approved=True)
+    approve_comments.short_description = "Approve selected comments"
+    
+    def reject_comments(self, request, queryset):
+        queryset.delete()
+    reject_comments.short_description = "Delete selected comments"

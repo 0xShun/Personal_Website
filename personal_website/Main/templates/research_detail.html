@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ research.title }}{% endblock %}
+
+{% block content %}
+<div class="notion-page container-fluid px-2 px-md-5">
+    <div class="notion-page-header">
+        <h1 class="notion-title">{{ research.title }}</h1>
+        <div class="research-meta">
+            <span class="research-date">Published: {{ research.published_date|date:"F j, Y" }}</span>
+            <span class="status-badge {{ research.status }}">{{ research.get_status_display }}</span>
+        </div>
+    </div>
+
+    <div class="notion-page-content">
+        <div class="notion-callout">
+            <div class="notion-callout-icon">📝</div>
+            <div class="notion-callout-content">
+                <h3>Abstract</h3>
+                <p>{{ research.abstract }}</p>
+                
+                <div class="mt-3">
+                {% if research.pdf_file %}
+                    <a href="{{ research.pdf_file.url }}" target="_blank" class="notion-button">
+                        <i class="ri-file-pdf-line"></i>
+                        <span>Download PDF</span>
+                    </a>
+                {% endif %}
+                
+                {% if research.link %}
+                    <a href="{{ research.link }}" target="_blank" class="notion-button">
+                        <i class="ri-external-link-line"></i>
+                        <span>View Publication</span>
+                    </a>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories -->
+        {% if research.categories.exists %}
+        <div class="notion-tags mt-4">
+            {% for category in research.categories.all %}
+                <span class="notion-tag">{{ category.name }}</span>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Comments Section -->
+    <div class="notion-block">
+        <h2>Comments</h2>
+        
+        <!-- Display existing comments -->
+        {% if comments %}
+            <div class="notion-comments">
+                {% for comment in comments %}
+                    <div class="notion-comment">
+                        <div class="notion-comment-header">
+                            <div class="notion-comment-author">{{ comment.name }}</div>
+                            <div class="notion-comment-date">{{ comment.created_at|date:"F j, Y" }}</div>
+                        </div>
+                        <div class="notion-comment-content">
+                            {{ comment.content|linebreaks }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="notion-callout">
+                <div class="notion-callout-icon">💬</div>
+                <div class="notion-callout-content">
+                    <p>Be the first to comment on this research!</p>
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- Comment form -->
+        <div class="notion-comment-form">
+            <h3>Leave a Comment</h3>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="notion-callout {% if message.tags %}notion-callout-{{ message.tags }}{% endif %}">
+                        <div class="notion-callout-content">
+                            {{ message }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="post" action="{% url 'post_comment' content_type='research' object_id=research.id %}">
+                {% csrf_token %}
+                
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="{{ comment_form.name.id_for_label }}">Name</label>
+                        {{ comment_form.name }}
+                    </div>
+                    <div class="form-group half">
+                        <label for="{{ comment_form.email.id_for_label }}">Email (not published)</label>
+                        {{ comment_form.email }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ comment_form.content.id_for_label }}">Comment</label>
+                    {{ comment_form.content }}
+                </div>
+                
+                <!-- Honeypot field - hidden from users but bots will fill it -->
+                {{ comment_form.honeypot }}
+                
+                <button type="submit" class="notion-button">Submit Comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.research-meta {
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.notion-comments {
+    margin-bottom: 2rem;
+}
+.notion-comment {
+    padding: 1rem;
+    border-radius: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+    margin-bottom: 1rem;
+}
+.notion-comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+.notion-comment-author {
+    font-weight: 600;
+    color: var(--accent-primary);
+}
+.notion-comment-date {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+.notion-comment-form {
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-light);
+}
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+.form-group {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+.form-group.half {
+    width: 50%;
+}
+.notion-input, .notion-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-family: inherit;
+}
+.notion-input:focus, .notion-textarea:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+.notion-callout-success {
+    background-color: rgba(46, 160, 67, 0.15);
+    border-color: rgba(46, 160, 67, 0.4);
+}
+.notion-callout-error {
+    background-color: rgba(248, 81, 73, 0.15);
+    border-color: rgba(248, 81, 73, 0.4);
+}
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .form-group.half {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}

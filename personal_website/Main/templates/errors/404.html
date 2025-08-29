@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Page Not Found | Shawn Michael Sudaria{% endblock %}
+
+{% block content %}
+<div class="notion-page container-fluid px-2 px-md-5">
+    <div class="notion-page-header">
+        <div class="notion-page-icon">🔍</div>
+        <h1><b>404 - Page Not Found</b></h1>
+    </div>
+
+    <div class="notion-block">
+        <div class="notion-callout">
+            <div class="notion-callout-content">
+                <p>The page you were looking for doesn't exist. You may have mistyped the address or the page may have moved.</p>
+            </div>
+        </div>
+
+        <div class="notion-buttons mt-4">
+            <a href="{% url 'home' %}" class="notion-button">
+                <i class="ri-home-line"></i>
+                <span>Return to Home</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

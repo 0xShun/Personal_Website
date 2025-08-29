@@ -1,11 +1,147 @@
-{% extends 'admin/index.html' %}
+{% extends "admin/index.html" %}
+{% load i18n static %}
 
 {% block extrastyle %}
-    {% include 'admin/base_admin_css.html' %}
-    {% include 'admin/dark_mode_css.html' %}
-    {% include 'admin/nav_sidebar_css.html' %}
-    {% include 'admin/dashboard_admin_css.html' %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_admin.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+.admin-dashboard-header {
+  background: linear-gradient(135deg, var(--dark-bg) 0%, var(--accent) 100%);
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  color: var(--light-text);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+}
+
+.dashboard-stat-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  background: var(--hover-bg);
+}
+
+.stat-info h3 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.stat-info p {
+  margin: 0.5rem 0 0;
+  color: var(--light-text);
+  font-size: 0.9rem;
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(46, 220, 217, 0.1);
+  color: var(--accent);
+  font-size: 1.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.badge-success {
+  background-color: rgba(46, 220, 217, 0.2);
+  color: var(--success);
+}
+
+.badge-info {
+  background-color: rgba(46, 220, 217, 0.2);
+  color: var(--info);
+}
+
+.badge-danger {
+  background-color: rgba(225, 98, 89, 0.2);
+  color: var(--error);
+}
+
+@media (max-width: 767px) {
+  .dashboard-stat-cards {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 {% endblock %}
+
 {% block content %}
-    {{ block.super }}
-{% endblock %} 
+<div class="admin-dashboard-header">
+  <h1>Welcome to your Admin Dashboard</h1>
+  <p>Manage your website content, users, and settings from here.</p>
+</div>
+
+<div class="dashboard-stat-cards">
+  <div class="stat-card">
+    <div class="stat-info">
+      <h3>{{ project_count|default:"0" }}</h3>
+      <p>Projects</p>
+    </div>
+    <div class="stat-icon">
+      <i class="fas fa-project-diagram"></i>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-info">
+      <h3>{{ article_count|default:"0" }}</h3>
+      <p>Articles</p>
+    </div>
+    <div class="stat-icon">
+      <i class="fas fa-newspaper"></i>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-info">
+      <h3>{{ research_count|default:"0" }}</h3>
+      <p>Research</p>
+    </div>
+    <div class="stat-icon">
+      <i class="fas fa-flask"></i>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-info">
+      <h3>{{ carousel_count|default:"0" }}</h3>
+      <p>Carousel Images</p>
+    </div>
+    <div class="stat-icon">
+      <i class="fas fa-images"></i>
+    </div>
+  </div>
+</div>
+
+{{ block.super }}
+{% endblock %}

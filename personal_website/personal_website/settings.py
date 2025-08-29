@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import sys
+import dj_database_url
+from dotenv import dotenv_values
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,18 +23,31 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-if not SECRET_KEY:
-    raise Exception('DJANGO_SECRET_KEY environment variable not set!')
+# Load environment variables from .env.local for local development if it exists
+if os.path.exists(os.path.join(BASE_DIR, '.env.local')):
+    env_vars = dotenv_values(os.path.join(BASE_DIR, '.env.local'))
+else:
+    env_vars = dotenv_values(os.path.join(BASE_DIR, '.env'))
 
-# SECRET_KEY = 'django-insecure-1234567890'
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env_vars.get('DJANGO_SECRET_KEY', 'django-insecure-1234567890')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+DEBUG = env_vars.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,www.shun.uno,shun.uno').split(',')
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.shun.uno', 'shun.uno']
+# Allowed hosts - add your PythonAnywhere domain
+ALLOWED_HOSTS = env_vars.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,www.shun.uno,shun.uno,*.pythonanywhere.com').split(',')
+
+# Security settings for production
+if not DEBUG:
+    # HTTPS settings
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = env_vars.get('SECURE_SSL_REDIRECT', 'True') == 'True'
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
@@ -47,6 +62,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -90,12 +107,18 @@ WSGI_APPLICATION = 'personal_website.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Use SQLite for local development, PostgreSQL for production
+if env_vars.get('DEBUG', 'False') == 'True':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': dj_database_url.config(default=env_vars.get('DATABASE_URL'))
+    }
 
 
 # Password validation
@@ -127,8 +150,7 @@ if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -151,3 +173,15 @@ LOGGING = {
         'level': 'ERROR',
     },
 }
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Cloudinary settings
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env_vars.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env_vars.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': env_vars.get('CLOUDINARY_API_SECRET'),
+}
+
+# Contact email
+CONTACT_EMAIL = env_vars.get('CONTACT_EMAIL', 'shawnmichael.sudaria04@gmail.com')

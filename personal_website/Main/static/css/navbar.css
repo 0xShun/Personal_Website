@@ -198,3 +198,38 @@
     flex-direction: column;
     gap: 4px;
 }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .nav-container {
+        padding: 0 8px;
+    }
+    .nav-menu {
+        width: 100vw;
+        right: -100vw;
+        padding-top: 64px;
+    }
+    .nav-menu.active {
+        right: 0;
+    }
+    .nav-item {
+        font-size: 1.1rem;
+        padding: 16px 24px;
+    }
+    .nav-brand {
+        margin-right: 0;
+    }
+    .shun-logo {
+        height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-menu {
+        padding-top: 56px;
+    }
+    .nav-item {
+        font-size: 1rem;
+        padding: 14px 16px;
+    }
+}

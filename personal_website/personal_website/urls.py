@@ -17,11 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from Main import views
+from Main.custom_admin import custom_admin_site
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve
+from django.urls import re_path
+
+# Custom error handlers
+handler404 = 'Main.views.custom_404'
+handler500 = 'Main.views.custom_500'
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # Use the custom admin site
+    path('4dm1n/', custom_admin_site.urls),
     path('', include('Main.urls'), name='home'),
     path('contact/', views.contact, name='contact'),
     path('articles/', include('Articles.urls', namespace='articles')),
@@ -29,6 +37,14 @@ urlpatterns = [
     path('research/', include('Research.urls')),
 ]
 
+# Serve media files in production
+if not settings.DEBUG:
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve, {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+    ]
 
-if settings.DEBUG:  # Only in development
+# Only in development
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

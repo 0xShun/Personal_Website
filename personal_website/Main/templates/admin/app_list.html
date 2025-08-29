@@ -1,0 +1,42 @@
+{% extends "admin/app_list.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="admin-nav-menu">
+  <div class="admin-menu-section">
+    <h3><i class="fas fa-tachometer-alt"></i> {% trans "Dashboard" %}</h3>
+    <ul class="admin-menu-items">
+      <li><a href="{% url 'admin:index' %}"><i class="fas fa-home"></i> {% trans "Home" %}</a></li>
+    </ul>
+  </div>
+
+  <div class="admin-menu-section">
+    <h3><i class="fas fa-file-alt"></i> {% trans "Content Management" %}</h3>
+    <ul class="admin-menu-items">
+      <li><a href="{% url 'admin:Main_article_changelist' %}"><i class="fas fa-newspaper"></i> {% trans "Articles" %}</a></li>
+      <li><a href="{% url 'admin:Main_project_changelist' %}"><i class="fas fa-project-diagram"></i> {% trans "Projects" %}</a></li>
+      <li><a href="{% url 'admin:Main_research_changelist' %}"><i class="fas fa-flask"></i> {% trans "Research" %}</a></li>
+      <li><a href="{% url 'admin:Main_carouselimage_changelist' %}"><i class="fas fa-images"></i> {% trans "Carousel Images" %}</a></li>
+    </ul>
+  </div>
+
+  <div class="admin-menu-section">
+    <h3><i class="fas fa-tags"></i> {% trans "Categories" %}</h3>
+    <ul class="admin-menu-items">
+      <li><a href="{% url 'admin:Main_articlecategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Article Categories" %}</a></li>
+      <li><a href="{% url 'admin:Main_projectcategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Project Categories" %}</a></li>
+      <li><a href="{% url 'admin:Main_researchcategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Research Categories" %}</a></li>
+    </ul>
+  </div>
+
+  <div class="admin-menu-section">
+    <h3><i class="fas fa-users-cog"></i> {% trans "Administration" %}</h3>
+    <ul class="admin-menu-items">
+      <li><a href="{% url 'admin:auth_user_changelist' %}"><i class="fas fa-users"></i> {% trans "Users" %}</a></li>
+      <li><a href="{% url 'admin:auth_group_changelist' %}"><i class="fas fa-user-friends"></i> {% trans "Groups" %}</a></li>
+    </ul>
+  </div>
+</div>
+
+{{ block.super }}
+{% endblock %}

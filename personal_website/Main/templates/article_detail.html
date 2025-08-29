@@ -3,12 +3,7 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
-    <!-- Page Cover with Fallback -->
-    <div class="notion-page-cover">
-        <div class="notion-cover-gradient"></div>
-    </div>
-
-    <div class="notion-page">
+    <div class="notion-page container-fluid px-2 px-md-5">
         <div class="notion-page-header">
             <h1 class="notion-title">{{ article.title }}</h1>
             <div class="article-meta">
@@ -17,8 +12,90 @@
         </div>
 
         <div class="notion-page-content">
-            <div class="article-content">
+            <div class="article-content px-1 px-md-0">
                 {{ article.content_html|safe }}
+            </div>
+        </div>
+        
+        <!-- Comments Section -->
+        <div class="notion-block mt-5">
+            <h2>Comments</h2>
+            
+            <!-- Existing Comments -->
+            <div class="notion-comments">
+                {% if comments %}
+                    {% for comment in comments %}
+                        <div class="notion-comment">
+                            <div class="notion-comment-header">
+                                <div class="notion-comment-author">
+                                    {{ comment.name }}
+                                    {% if comment.website %}
+                                        <a href="{{ comment.website }}" target="_blank" rel="noopener noreferrer">
+                                            <i class="ri-link"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="notion-comment-date">{{ comment.created_at|date:"F j, Y" }}</div>
+                            </div>
+                            <div class="notion-comment-content">
+                                {{ comment.content|safe }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="notion-callout">
+                        <div class="notion-callout-content">
+                            <p>Be the first to comment on this article!</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Comment Form -->
+            <div class="notion-comment-form mt-4">
+                <h3>Leave a Comment</h3>
+                <form method="post" action="{% url 'post_comment' 'article' article.id %}">
+                    {% csrf_token %}
+                    
+                    <div class="form-group mb-3">
+                        <label for="id_name">Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback d-block">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="id_email">Email (will not be published)</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="id_website">Website (optional)</label>
+                        {{ form.website }}
+                        {% if form.website.errors %}
+                            <div class="invalid-feedback d-block">{{ form.website.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="id_content">Comment</label>
+                        {{ form.content }}
+                        {% if form.content.errors %}
+                            <div class="invalid-feedback d-block">{{ form.content.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    {{ form.honeypot }}
+                    
+                    <button type="submit" class="notion-button mt-3">
+                        <i class="ri-send-plane-line"></i>
+                        <span>Submit Comment</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -26,7 +103,7 @@
     <style>
         .article-meta {
             margin-top: 1rem;
-            color: var(--color-text-default-light);
+            color: var(--text-secondary);
             font-size: 0.9rem;
         }
 

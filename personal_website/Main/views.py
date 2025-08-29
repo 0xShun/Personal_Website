@@ -6,7 +6,12 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.crypto import get_random_string
 from django.core.cache import cache
-from .models import Project, Research, Article, ArticleCategory, ProjectCategory, ResearchCategory, CarouselImage
+from django.http import HttpResponseRedirect, HttpResponse
+from django.views.decorators.http import require_POST
+from django.utils import timezone
+from django.contrib.contenttypes.models import ContentType
+from .models import Project, Research, Article, ArticleCategory, ProjectCategory, ResearchCategory, CarouselImage, Comment
+from .forms import CommentForm
 import os
 from django.conf import settings
 import logging
@@ -229,6 +234,25 @@ def projects(request):
     categories = ProjectCategory.objects.all()
     return render(request, 'projects.html', {'projects': projects, 'categories': categories, 'selected_category': category_filter})
 
+def project_detail(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    
+    # Get approved comments
+    comments = Comment.objects.filter(
+        content_type='project',
+        object_id=project.id,
+        is_approved=True
+    )
+    
+    # Comment form
+    form = CommentForm()
+    
+    return render(request, 'project_detail.html', {
+        'project': project,
+        'comments': comments,
+        'comment_form': form
+    })
+
 def research(request):
     category_filter = request.GET.get('category')
     if category_filter:
@@ -240,7 +264,22 @@ def research(request):
 
 def research_detail(request, pk):
     research = get_object_or_404(Research, pk=pk)
-    return render(request, 'research_detail.html', {'research': research})
+    
+    # Get approved comments
+    comments = Comment.objects.filter(
+        content_type='research',
+        object_id=research.id,
+        is_approved=True
+    )
+    
+    # Comment form
+    form = CommentForm()
+    
+    return render(request, 'research_detail.html', {
+        'research': research,
+        'comments': comments,
+        'comment_form': form
+    })
 
 def articles(request):
     category_filter = request.GET.get('category')
@@ -253,4 +292,75 @@ def articles(request):
 
 def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug)
-    return render(request, 'article_detail.html', {'article': article})
+    
+    # Get approved comments
+    content_type = ContentType.objects.get_for_model(Article)
+    comments = Comment.objects.filter(
+        content_type=content_type,
+        object_id=article.id,
+        is_approved=True
+    ).order_by('-created_at')
+    
+    # Comment form
+    form = CommentForm()
+    
+    return render(request, 'article_detail.html', {
+        'article': article,
+        'comments': comments,
+        'form': form
+    })
+
+@require_POST
+def post_comment(request, content_type, object_id):
+    """
+    Handle comment submissions with rate limiting and security checks
+    """
+    referer = request.META.get('HTTP_REFERER', '/')
+    
+    # Get IP address for rate limiting
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    
+    # Rate limiting - one comment per minute per IP
+    cache_key = f'comment_ip_{ip}'
+    last_comment_time = cache.get(cache_key)
+    
+    if last_comment_time and (timezone.now() - last_comment_time).total_seconds() < 60:
+        messages.error(request, "Please wait a moment before posting another comment.")
+        return HttpResponseRedirect(referer)
+    
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.content_type = content_type
+        comment.object_id = object_id
+        comment.ip_address = ip
+        
+        # Auto-approve for now, can set to False for moderation
+        comment.is_approved = True
+        comment.save()
+        
+        # Set rate limit
+        cache.set(cache_key, timezone.now())
+        
+        messages.success(request, "Your comment has been submitted successfully!")
+    else:
+        # If the form is invalid, show the errors
+        error_message = "There was an error with your comment submission. "
+        for field, errors in form.errors.items():
+            error_message += f"{field}: {', '.join(errors)} "
+        messages.error(request, error_message)
+    
+    return HttpResponseRedirect(referer)
+
+# Custom error handlers
+def custom_404(request, exception):
+    """Custom 404 page for when a page is not found"""
+    return render(request, 'errors/404.html', status=404)
+
+def custom_500(request):
+    """Custom 500 page for server errors"""
+    return render(request, 'errors/500.html', status=500)

@@ -10,29 +10,29 @@
     <div class="notion-page-header">
         <div class="header-flex-container">
             <div class="notion-page-icon" style="font-size: 100px; width: 200px; height: 200px;">
-                <img src="https://i.imgur.com/Dv5tyMZ.jpeg" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                <img src="https://i.imgur.com/6XL1iVW.png" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
             </div>
             <div class="typing-container">
                 <pre id="typewriter">
 <span class="keyword">class</span> <span class="class-name">Researcher</span>:
     <span class="keyword">def</span> <span class="function">__init__</span>(self):
-        self.name = <span class="string-highlight">"Shawn Michael Sudaria"</span>
+        self.nickname = <span class="string-highlight">"Shうn"</span>
         self.research_group = <span class="string-highlight">"Excelr8 Labs"</span>
         self.roles = [
             <span class="string-highlight">"Data Analyst"</span>,
             <span class="string-highlight">"Data Engineer"</span>,
-            <span class="string-highlight">"Security Researcher"</span>
+            <span class="string-highlight">"Security Researcher",</span>
             <span class="string-highlight">"Software Engineer"</span>
         ]
+            </pre>
             </div>
         </div>
     </div>
 
     <!-- About Me Section -->
     <div class="notion-callout">
-        <div class="notion-callout-icon">💡</div>
         <div class="notion-callout-content">
-            Naturally inquisitive and detail-oriented, I'm a self-driven data enthusiast with a passion for uncovering insights, building reliable data systems, and solving complex problems through analytics and engineering. I thrive at the intersection of logic and creativity — designing, developing, and optimizing data solutions that are both insightful and scalable. Welcome to my digital garden! Here you'll find my thoughts, projects, and research work.
+            Naturally inquisitive and detail-oriented, Shawn is a self-driven data and cybersecurity researcher with a passion for uncovering insights, building reliable data systems, and fortifying digital environments through analytics and engineering. He thrives at the intersection of logic and creativity, designing, developing, and optimizing solutions that are both scalable and secure. Welcome to his digital garden, where he shares his thoughts, projects, and research work.
         </div>
     </div>
 
@@ -49,7 +49,7 @@
             <a href="{% url 'research' %}" class="quick-link-card">
                 <div class="notion-card-icon">📚</div>
                 <h3>Research</h3>
-                <p>Read about my research work and publications</p>
+                <p>Read about my research works</p>
             </a>
             
             <a href="{% url 'articles' %}" class="quick-link-card">
@@ -64,16 +64,11 @@
     {% if carousel_images %}
     <div class="notion-block">
         <h2>Gallery 📸</h2>
-        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000" style="max-width:700px; margin:0 auto;">
-          <div class="carousel-indicators">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" style="max-width:700px; margin:0 auto;">
+          <div class="carousel-inner" style="width:100%; max-width:700px; height:400px;">
             {% for image in carousel_images %}
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-current="true" aria-label="Slide {{ forloop.counter }}"></button>
-            {% endfor %}
-          </div>
-          <div class="carousel-inner" style="width:700px; height:400px;">
-            {% for image in carousel_images %}
-              <div class="carousel-item {% if forloop.first %}active{% endif %}" style="width:700px; height:400px;">
-                <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ image.title }}" style="width:700px; height:400px; object-fit:cover; background:#222; border-radius:12px;">
+              <div class="carousel-item {% if forloop.first %}active{% endif %}" style="width:100%; height:400px;">
+                <img src="{{ image.image_url }}" class="d-block w-100 img-fluid" alt="{{ image.title }}" style="width:100%; height:400px; object-fit:cover; background:#222; border-radius:12px;">
                 {% if image.title or image.caption %}
                 <div class="carousel-caption d-none d-md-block">
                   {% if image.title %}<h5>{{ image.title }}</h5>{% endif %}
@@ -113,11 +108,19 @@
                     </tr>
                     <tr>
                         <td>Frameworks</td>
-                        <td>Django, Flask, PyTorch, Scikit-learn, FastAPI</td>
+                        <td>Django, Flask, FastAPI</td>
                     </tr>
                     <tr>
                         <td>Tools</td>
-                        <td>Git, Docker, Google Cloud, Power BI</td>
+                        <td>Git, Docker, Google Cloud, Power BI, ELK Stack, AWS</td>
+                    </tr>
+                    <tr>
+                        <td>Libraries</td>
+                        <td>NumPy, Pandas, Matplotlib, PyTorch, Scikit-learn</td>
+                    </tr>
+                    <tr>
+                        <td>Cybersecurity</td>
+                        <td>DFIR, Reverse Engineering, Malware Analysis, Cyber Threat Intelligence</td>
                     </tr>
                 </tbody>
             </table>
@@ -232,6 +235,21 @@
 
 .header-content {
     text-align: center;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.20); /* Black with 20% opacity */
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 0 0 12px 12px;
+    padding: 12px 32px 12px 32px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    box-sizing: border-box;
 }
 </style>
 

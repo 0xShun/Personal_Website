@@ -3,10 +3,10 @@
 {% block content %}
 <div class="container">
     <h1>Articles</h1>
-    <div class="row">
+    <div class="row articles-single-col">
         {% if articles %}
             {% for article in articles %}
-                <div class="col-md-4 mb-4">
+                <div class="col-12 mb-4 article-full-width">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{ article.title }}</h5>
@@ -23,3 +23,14 @@
     </div>
 </div>
 {% endblock %}
+
+<style>
+.articles-single-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px;
+}
+.article-full-width {
+    width: 100%;
+}
+</style>

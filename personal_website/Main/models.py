@@ -122,7 +122,7 @@ class Research(models.Model):
         verbose_name_plural = "Research"
 
 class CarouselImage(models.Model):
-    image = models.ImageField(upload_to="carousel/")
+    image_url = models.URLField("Image URL", help_text="Paste a direct image link (e.g., Imgur)")
     title = models.CharField(max_length=100, blank=True)
     caption = models.TextField(blank=True)
     order = models.PositiveIntegerField(default=0)
@@ -130,4 +130,42 @@ class CarouselImage(models.Model):
     def __str__(self):
         return self.title or f"Carousel Image {self.pk}"
 
+
+class Comment(models.Model):
+    CONTENT_TYPES = (
+        ('project', 'Project'),
+        ('research', 'Research'),
+        ('article', 'Article'),
+    )
+    
+    content_type = models.CharField(max_length=20, choices=CONTENT_TYPES)
+    object_id = models.PositiveIntegerField()
+    name = models.CharField(max_length=100)
+    email = models.EmailField()  # Optional but useful for spam prevention
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False)  # For moderation
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Comment by {self.name} on {self.content_type} {self.object_id}"
+    
+    def save(self, *args, **kwargs):
+        # Basic sanitization (you'll need to install bleach)
+        # from django.utils.html import strip_tags
+        # import bleach
+        # self.name = bleach.clean(strip_tags(self.name))
+        # self.content = bleach.clean(self.content, 
+        #                           tags=['p', 'br', 'strong', 'em'],
+        #                           strip=True)
+        
+        # For now, just use strip_tags for basic sanitization
+        from django.utils.html import strip_tags
+        self.name = strip_tags(self.name)
+        self.content = strip_tags(self.content)
+        
+        super().save(*args, **kwargs)
 

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Server Error | Shawn Michael Sudaria{% endblock %}
+
+{% block content %}
+<div class="notion-page container-fluid px-2 px-md-5">
+    <div class="notion-page-header">
+        <div class="notion-page-icon">⚠️</div>
+        <h1><b>500 - Server Error</b></h1>
+    </div>
+
+    <div class="notion-block">
+        <div class="notion-callout">
+            <div class="notion-callout-content">
+                <p>Something went wrong on our servers. We're aware of the problem and working to fix it.</p>
+                <p>Please try again later or contact us if the problem persists.</p>
+            </div>
+        </div>
+
+        <div class="notion-buttons mt-4">
+            <a href="{% url 'home' %}" class="notion-button">
+                <i class="ri-home-line"></i>
+                <span>Return to Home</span>
+            </a>
+            <a href="{% url 'contact' %}" class="notion-button">
+                <i class="ri-mail-line"></i>
+                <span>Contact Support</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

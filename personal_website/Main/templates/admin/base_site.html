@@ -1,5 +1,46 @@
-{% extends 'admin/base.html' %}
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Shawn\'s Admin') }}{% endblock %}
+
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/custom_admin.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>
+    // Set dark theme by default
+    document.documentElement.setAttribute('data-theme', 'dark');
+</script>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <span class="brand-icon"><i class="fas fa-code"></i></span>
+        <span class="brand-text">{{ site_header|default:_('Shawn\'s Admin Dashboard') }}</span>
+    </a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block usertools %}
+<div id="user-tools" class="custom-user-tools">
+    {% if has_permission %}
+    <div class="welcome-message">
+        <span>Welcome,</span>
+        <strong>{% firstof user.get_short_name user.get_username %}</strong>
+    </div>
+    <div class="user-actions">
+        {% if user.is_active and user.is_staff %}
+            <a href="{% url 'admin:password_change' %}"><i class="fas fa-key"></i> Change password</a> /
+        {% endif %}
+        <a href="{% url 'admin:logout' %}"><i class="fas fa-sign-out-alt"></i> Log out</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
 
 {% block content %}
     {{ block.super }}
-{% endblock %} 
+{% endblock %}

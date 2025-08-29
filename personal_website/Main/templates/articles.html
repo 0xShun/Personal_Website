@@ -4,11 +4,11 @@
 {% block title %}Articles | Shawn Michael Sudaria{% endblock %}
 
 {% block content %}
-<div class="notion-page">
+<div class="notion-page container-fluid px-2 px-md-5">
     <!-- Page Header -->
     <div class="notion-page-header">
         <div class="notion-page-icon">📝</div>
-        <h1>Articles</h1>
+        <h1><b>Articles</b></h1>
         <div class="notion-block notion-text">Thoughts, tutorials, and technical writings</div>
     </div>
 
@@ -29,12 +29,9 @@
         <!-- Article Grid -->
         <div class="notion-block">
             <h2>Latest Articles</h2>
-            <div class="notion-grid">
+            <div class="notion-grid notion-grid-single">
                 {% for article in articles %}
                     <div class="notion-card" data-categories="{% for category in article.categories.all %}{{ category.name }} {% endfor %}">
-                        <div class="notion-card-icon">
-                            <!-- Add any icon logic if needed -->
-                        </div>
                         <h3>{{ article.title }}</h3>
                         <p>{{ article.content_html|truncatewords_html:25|safe }}</p>
                         <div class="notion-metadata">
