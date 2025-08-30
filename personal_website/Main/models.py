@@ -162,6 +162,7 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField()
     name = models.CharField(max_length=100)
     email = models.EmailField()  # Optional but useful for spam prevention
+    website = models.URLField(blank=True, null=True, help_text="Your website (optional)")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_approved = models.BooleanField(default=False)  # For moderation

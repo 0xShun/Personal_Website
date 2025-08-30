@@ -6,7 +6,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.utils.crypto import get_random_string
 from django.core.cache import cache
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
@@ -294,9 +294,8 @@ def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug)
     
     # Get approved comments
-    content_type = ContentType.objects.get_for_model(Article)
     comments = Comment.objects.filter(
-        content_type=content_type,
+        content_type='article',
         object_id=article.id,
         is_approved=True
     ).order_by('-created_at')
@@ -314,9 +313,8 @@ def article_detail(request, slug):
 def post_comment(request, content_type, object_id):
     """
     Handle comment submissions with rate limiting and security checks
+    Supports both AJAX and regular form submissions
     """
-    referer = request.META.get('HTTP_REFERER', '/')
-    
     # Get IP address for rate limiting
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -329,8 +327,11 @@ def post_comment(request, content_type, object_id):
     last_comment_time = cache.get(cache_key)
     
     if last_comment_time and (timezone.now() - last_comment_time).total_seconds() < 60:
-        messages.error(request, "Please wait a moment before posting another comment.")
-        return HttpResponseRedirect(referer)
+        error_msg = "Please wait a moment before posting another comment."
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': error_msg})
+        messages.error(request, error_msg)
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     
     form = CommentForm(request.POST)
     if form.is_valid():
@@ -346,15 +347,36 @@ def post_comment(request, content_type, object_id):
         # Set rate limit
         cache.set(cache_key, timezone.now())
         
-        messages.success(request, "Your comment has been submitted successfully!")
+        success_msg = "Your comment has been submitted successfully!"
+        
+        # Handle AJAX request
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True, 
+                'message': success_msg,
+                'comment': {
+                    'name': comment.name,
+                    'content': comment.content,
+                    'created_at': comment.created_at.strftime('%B %d, %Y'),
+                    'website': comment.website if comment.website else None
+                }
+            })
+        
+        messages.success(request, success_msg)
     else:
         # If the form is invalid, show the errors
         error_message = "There was an error with your comment submission. "
         for field, errors in form.errors.items():
-            error_message += f"{field}: {', '.join(errors)} "
-        messages.error(request, error_message)
+            if field == 'honeypot':
+                continue  # Don't show honeypot errors to users
+            error_message += f"{', '.join(errors)} "
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': error_message.strip()})
+            
+        messages.error(request, error_message.strip())
     
-    return HttpResponseRedirect(referer)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 # Custom error handlers
 def custom_404(request, exception):

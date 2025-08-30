@@ -29,3 +29,39 @@
     font-style: italic;
     margin-bottom: 10px;
 }
+
+/* Style for the "Use Current Time" buttons */
+.field-created_at button.small-button,
+.field-updated_at button.small-button {
+    background-color: #007cba;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.2s;
+}
+
+.field-created_at button.small-button:hover,
+.field-updated_at button.small-button:hover {
+    background-color: #005a87;
+}
+
+/* Ensure datetime inputs don't show validation errors for empty values */
+.field-created_at .errorlist,
+.field-updated_at .errorlist {
+    display: none;
+}
+
+/* Style the datetime field containers */
+.field-created_at,
+.field-updated_at {
+    margin-bottom: 15px;
+}
+
+.field-created_at label,
+.field-updated_at label {
+    display: inline-block;
+    width: 150px;
+    font-weight: bold;
+}

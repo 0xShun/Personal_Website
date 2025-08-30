@@ -11,10 +11,11 @@ class CommentForm(forms.ModelForm):
     
     class Meta:
         model = Comment
-        fields = ('name', 'email', 'content')
+        fields = ('name', 'email', 'website', 'content')
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Your Name', 'class': 'notion-input'}),
             'email': forms.EmailInput(attrs={'placeholder': 'Your Email (not published)', 'class': 'notion-input'}),
+            'website': forms.URLInput(attrs={'placeholder': 'https://yourwebsite.com (optional)', 'class': 'notion-input'}),
             'content': forms.Textarea(attrs={'placeholder': 'Your comment...', 'rows': 4, 'class': 'notion-textarea'}),
         }
         

@@ -54,6 +54,18 @@
             <!-- Comment Form -->
             <div class="notion-comment-form mt-4">
                 <h3>Leave a Comment</h3>
+                
+                <!-- Display Django messages for non-AJAX submissions -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="notion-callout notion-callout-{{ message.tags }}">
+                            <div class="notion-callout-content">
+                                {{ message }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
                 <form method="post" action="{% url 'post_comment' 'article' article.id %}">
                     {% csrf_token %}
                     
@@ -99,6 +111,10 @@
             </div>
         </div>
     </div>
+
+    <!-- Include comment JavaScript -->
+    {% load static %}
+    <script src="{% static 'js/comments.js' %}"></script>
 
     <style>
         .article-meta {

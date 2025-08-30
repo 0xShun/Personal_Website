@@ -35,23 +35,39 @@ class ProjectAdmin(admin.ModelAdmin):
     )
 
 class ArticleAdminForm(forms.ModelForm):
+    created_at = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={
+            'type': 'datetime-local',
+            'step': '60'  # Allow minute precision
+        }),
+        input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M'],
+        help_text="Leave blank to use current date/time"
+    )
+    
+    updated_at = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={
+            'type': 'datetime-local',
+            'step': '60'  # Allow minute precision
+        }),
+        input_formats=['%Y-%m-%dT%H:%M', '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M'],
+        help_text="Leave blank to use current date/time"
+    )
+
     class Meta:
         model = Article
         fields = '__all__'
-        widgets = {
-            'created_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
-            'updated_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
-        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Make datetime fields optional in the form
-        self.fields['created_at'].required = False
-        self.fields['updated_at'].required = False
         
-        # Set help text
-        self.fields['created_at'].help_text = "Leave blank to use current date/time. Format: YYYY-MM-DD HH:MM"
-        self.fields['updated_at'].help_text = "Leave blank to use current date/time. Format: YYYY-MM-DD HH:MM"
+        # Set initial values for display if they exist
+        if self.instance and self.instance.pk:
+            if self.instance.created_at:
+                self.fields['created_at'].initial = self.instance.created_at
+            if self.instance.updated_at:
+                self.fields['updated_at'].initial = self.instance.updated_at
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
