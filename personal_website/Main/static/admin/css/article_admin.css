@@ -1,0 +1,31 @@
+/* Custom styles for article admin datetime fields */
+.field-created_at input[type="datetime-local"],
+.field-updated_at input[type="datetime-local"] {
+    width: 200px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.field-created_at .help,
+.field-updated_at .help {
+    color: #666;
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+/* Style for the publishing dates fieldset */
+.fieldset-publishing-dates {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.fieldset-publishing-dates .description {
+    color: #6c757d;
+    font-style: italic;
+    margin-bottom: 10px;
+}

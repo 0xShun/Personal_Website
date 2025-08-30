@@ -58,10 +58,20 @@ class Article(models.Model):
     )
     content_md = models.TextField(editable=False)
     content_html = models.TextField(editable=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(blank=True, null=True, help_text="Leave blank to use current date/time")
+    updated_at = models.DateTimeField(blank=True, null=True, help_text="Leave blank to use current date/time")
 
     def save(self, *args, **kwargs):
+        from django.utils import timezone
+        
+        # Set created_at if not provided (only for new objects)
+        if not self.pk and not self.created_at:
+            self.created_at = timezone.now()
+            
+        # Set updated_at if not provided
+        if not self.updated_at:
+            self.updated_at = timezone.now()
+        
         # Generate slug if not provided
         if not self.slug:
             self.slug = slugify(self.title)

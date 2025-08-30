@@ -34,8 +34,28 @@ class ProjectAdmin(admin.ModelAdmin):
         }),
     )
 
+class ArticleAdminForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = '__all__'
+        widgets = {
+            'created_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+            'updated_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make datetime fields optional in the form
+        self.fields['created_at'].required = False
+        self.fields['updated_at'].required = False
+        
+        # Set help text
+        self.fields['created_at'].help_text = "Leave blank to use current date/time. Format: YYYY-MM-DD HH:MM"
+        self.fields['updated_at'].help_text = "Leave blank to use current date/time. Format: YYYY-MM-DD HH:MM"
+
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
+    form = ArticleAdminForm
     list_display = ('title', 'created_at', 'updated_at')
     list_display_links = ('title',)
     search_fields = ('title',)
@@ -46,6 +66,10 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Article Information', {
             'fields': ('title', 'slug', 'categories')
+        }),
+        ('Publishing Dates', {
+            'fields': ('created_at', 'updated_at'),
+            'description': 'Leave blank to use current date and time automatically.'
         }),
         ('Content', {
             'fields': ('markdown_file',),
@@ -64,6 +88,12 @@ class ArticleAdmin(admin.ModelAdmin):
         
         if 'markdown_file' in form.changed_data:
             obj.save()  # This will trigger the markdown processing in the model
+
+    class Media:
+        css = {
+            'all': ('admin/css/article_admin.css',)
+        }
+        js = ('admin/js/article_admin.js',)
 
 class ResearchAdminForm(forms.ModelForm):
     CHOICES = (
