@@ -191,3 +191,23 @@ class Comment(models.Model):
         
         super().save(*args, **kwargs)
 
+
+class Accolade(models.Model):
+    title = models.CharField(max_length=200, help_text="Title of the accolade (e.g., '2nd Runner Up, HackForGov Regionals 2023')")
+    description = models.TextField(help_text="Description of the achievement and competition details")
+    date_achieved = models.DateField(help_text="Date when this accolade was achieved")
+    organization = models.CharField(max_length=200, blank=True, help_text="Organization that hosted the competition (optional)")
+    position = models.CharField(max_length=100, blank=True, help_text="Position achieved (e.g., '2nd Runner Up', 'Finalist', 'Top 6')")
+    team_name = models.CharField(max_length=100, blank=True, help_text="Name of the team (if applicable)")
+    is_featured = models.BooleanField(default=True, help_text="Display this accolade on the home page")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-date_achieved', '-created_at']
+        verbose_name = "Accolade"
+        verbose_name_plural = "Accolades"
+    
+    def __str__(self):
+        return self.title
+

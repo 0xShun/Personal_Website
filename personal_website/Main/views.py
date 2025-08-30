@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
-from .models import Project, Research, Article, ArticleCategory, ProjectCategory, ResearchCategory, CarouselImage, Comment
+from .models import Project, Research, Article, ArticleCategory, ProjectCategory, ResearchCategory, CarouselImage, Comment, Accolade
 from .forms import CommentForm
 import os
 from django.conf import settings
@@ -37,9 +37,12 @@ def home(request):
     logger.info("Static file paths checked:\n" + "\n".join(logo_paths))
     
     images = CarouselImage.objects.order_by('order')
+    accolades = Accolade.objects.filter(is_featured=True).order_by('-date_achieved')[:6]  # Show latest 6 featured accolades
+    
     context = {
         'title': 'Home',
         'carousel_images': images,
+        'accolades': accolades,
     }
     return render(request, 'home.html', context)
 

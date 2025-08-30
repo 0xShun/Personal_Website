@@ -127,6 +127,35 @@
         </div>
     </div>
 
+    <!-- Accolades Section -->
+    {% if accolades %}
+    <div class="notion-block">
+        <h2>Accolades</h2>
+        <div class="notion-list">
+            {% for accolade in accolades %}
+            <div class="notion-list-item">
+                <div class="notion-list-item-content">
+                    <div class="notion-list-item-title">
+                        <strong>{{ accolade.title }}</strong>
+                        {% if accolade.date_achieved %}
+                        <span class="notion-date">{{ accolade.date_achieved|date:"M Y" }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="notion-list-item-description">
+                        {{ accolade.description }}
+                    </div>
+                    {% if accolade.team_name %}
+                    <div class="notion-list-item-meta">
+                        <i class="ri-team-line"></i> Team: {{ accolade.team_name }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Contact Section -->
     <div class="notion-block">
         <h2>Get in Touch</h2>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage, Comment
+from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage, Comment, Accolade
 from django.contrib.admin import SimpleListFilter
 from Articles.models import Tag
 from django import forms
@@ -268,6 +268,30 @@ class CarouselImageAdmin(admin.ModelAdmin):
         return ""
     image_preview.allow_tags = True
     image_preview.short_description = "Preview"
+
+class AccoladeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'position', 'date_achieved', 'organization', 'is_featured', 'created_at')
+    list_filter = ('is_featured', 'date_achieved', 'organization', 'position')
+    search_fields = ('title', 'description', 'organization', 'team_name')
+    list_editable = ('is_featured',)
+    date_hierarchy = 'date_achieved'
+    ordering = ['-date_achieved', '-created_at']
+    
+    fieldsets = (
+        ('Accolade Details', {
+            'fields': ('title', 'description', 'date_achieved')
+        }),
+        ('Competition Information', {
+            'fields': ('organization', 'position', 'team_name')
+        }),
+        ('Display Options', {
+            'fields': ('is_featured',),
+            'description': 'Choose whether to display this accolade on the home page.'
+        }),
+    )
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related()
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('name', 'get_content_object', 'content_preview', 'created_at', 'is_approved')
