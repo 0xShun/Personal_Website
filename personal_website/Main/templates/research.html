@@ -51,7 +51,11 @@
                                 <span class="status-badge ongoing">Ongoing</span>
                             </div>
                             <h3>{{ research.title }}</h3>
-                            <p>{{ research.description }}</p>
+                            {% if research.abstract %}
+                                <p>{{ research.abstract }}</p>
+                            {% else %}
+                                <p><em>Research in progress. Abstract will be available upon completion.</em></p>
+                            {% endif %}
                             <div class="notion-tags">
                                 {% for category in research.categories.all %}
                                     <span class="notion-tag">{{ category.name }}</span>
@@ -86,10 +90,20 @@
                         {% for research in year.list %}
                             <div class="notion-card">
                                 <h3>{{ research.title }}</h3>
-                                <p class="notion-text-muted">Published: {{ research.published_date|date:"F j, Y" }}</p>
-                                <div class="research-abstract">
-                                    <p>{{ research.abstract }}</p>
-                                </div>
+                                {% if research.published_date %}
+                                    <p class="notion-text-muted">Published: {{ research.published_date|date:"F j, Y" }}</p>
+                                {% else %}
+                                    <p class="notion-text-muted">Research in Progress</p>
+                                {% endif %}
+                                {% if research.abstract %}
+                                    <div class="research-abstract">
+                                        <p>{{ research.abstract }}</p>
+                                    </div>
+                                {% else %}
+                                    <div class="research-abstract">
+                                        <p><em>Abstract will be available upon completion of this ongoing research.</em></p>
+                                    </div>
+                                {% endif %}
                                 {% if research.pdf_file %}
                                     <div class="notion-buttons">
                                         <a href="{{ research.pdf_file.url }}" class="notion-button" target="_blank" rel="noopener noreferrer">

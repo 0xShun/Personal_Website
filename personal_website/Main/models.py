@@ -105,10 +105,10 @@ class Research(models.Model):
     ]
     
     title = models.CharField(max_length=200)
-    abstract = models.TextField()
+    abstract = models.TextField(blank=True, null=True, help_text="Optional for ongoing research")
     pdf_file = models.FileField(upload_to='research_pdfs/', blank=True, null=True)
     link = models.URLField(blank=True, null=True)
-    published_date = models.DateField()
+    published_date = models.DateField(blank=True, null=True, help_text="Optional for ongoing research")
     categories = models.ManyToManyField(ResearchCategory, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='ongoing')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -117,8 +117,18 @@ class Research(models.Model):
     def __str__(self):
         return self.title
 
+    def clean(self):
+        """Custom validation to ensure completed research has required fields"""
+        from django.core.exceptions import ValidationError
+        
+        if self.status == 'completed':
+            if not self.abstract:
+                raise ValidationError({'abstract': 'Abstract is required for completed research.'})
+            if not self.published_date:
+                raise ValidationError({'published_date': 'Published date is required for completed research.'})
+
     class Meta:
-        ordering = ['-published_date']
+        ordering = ['-created_at']  # Changed to created_at since published_date can be null
         verbose_name_plural = "Research"
 
 class CarouselImage(models.Model):

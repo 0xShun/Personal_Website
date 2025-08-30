@@ -31,9 +31,8 @@
             <h2>Latest Articles</h2>
             <div class="notion-grid notion-grid-single">
                 {% for article in articles %}
-                    <div class="notion-card" data-categories="{% for category in article.categories.all %}{{ category.name }} {% endfor %}">
+                    <div class="notion-card">
                         <h3>{{ article.title }}</h3>
-                        <p>{{ article.content_html|truncatewords_html:25|safe }}</p>
                         <div class="notion-metadata">
                             <span><i class="ri-calendar-line"></i> {{ article.created_at|date:"F j, Y" }}</span>
                             <span class="notion-tag">{% for category in article.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>

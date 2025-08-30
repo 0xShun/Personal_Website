@@ -83,34 +83,61 @@ class ResearchAdminForm(forms.ModelForm):
             self.fields['file_type'].initial = 'link'
         else:
             self.fields['file_type'].initial = 'pdf'
+            
+        # Make abstract and published_date optional by default in the form
+        # Validation will be handled in clean() method based on status
+        self.fields['abstract'].required = False
+        self.fields['published_date'].required = False
 
     def clean(self):
         cleaned_data = super().clean()
         file_type = cleaned_data.get('file_type')
         pdf_file = cleaned_data.get('pdf_file')
         link = cleaned_data.get('link')
+        status = cleaned_data.get('status')
+        abstract = cleaned_data.get('abstract')
+        published_date = cleaned_data.get('published_date')
+        
+        # File type validation
         if file_type == 'pdf' and not pdf_file:
             self.add_error('pdf_file', 'Please upload a PDF file or switch to link.')
         if file_type == 'link' and not link:
             self.add_error('link', 'Please provide a link or switch to PDF upload.')
+            
+        # Status-based validation for abstract and published_date
+        if status == 'completed':
+            if not abstract:
+                self.add_error('abstract', 'Abstract is required for completed research.')
+            if not published_date:
+                self.add_error('published_date', 'Published date is required for completed research.')
+        
         return cleaned_data
 
 @admin.register(Research)
 class ResearchAdmin(admin.ModelAdmin):
     form = ResearchAdminForm
-    list_display = ('title', 'status', 'created_at', 'updated_at')
-    list_filter = ('status', 'categories', 'created_at')
-    search_fields = ('title', 'description')
+    list_display = ('title', 'status', 'published_date', 'created_at', 'updated_at')
+    list_filter = ('status', 'categories', 'created_at', 'published_date')
+    search_fields = ('title', 'abstract')
     filter_horizontal = ('categories',)
     date_hierarchy = 'published_date'
     fieldsets = (
-        ('Research Information', {
-            'fields': ('title', 'abstract', 'published_date', 'categories', 'status', 'file_type', 'pdf_file', 'link')
+        ('Basic Information', {
+            'fields': ('title', 'status', 'categories'),
+            'description': 'Basic research information and status'
+        }),
+        ('Content', {
+            'fields': ('abstract', 'published_date'),
+            'description': 'Note: Abstract and published date are optional for ongoing research'
+        }),
+        ('File/Link', {
+            'fields': ('file_type', 'pdf_file', 'link'),
+            'description': 'Choose whether to upload a PDF file or provide an external link'
         }),
     )
 
     class Media:
-        js = ('admin/js/research_filetype.js',)
+        js = ('admin/js/research_admin.js',)
 
 @admin.register(ProjectCategory)
 class ProjectCategoryAdmin(admin.ModelAdmin):

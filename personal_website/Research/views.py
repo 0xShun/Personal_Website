@@ -5,7 +5,8 @@ from Main.forms import CommentForm
 
 # Create your views here.
 def research(request):
-    papers = Research.objects.all().order_by('-publication_date')
+    # Order by published_date (nulls last) then by created_at for ongoing research
+    papers = Research.objects.all().order_by('-published_date', '-created_at')
     context = {
         'papers': papers,
         'title': 'Research'
