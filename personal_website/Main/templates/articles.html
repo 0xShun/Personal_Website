@@ -26,30 +26,59 @@
     </div>
 
     {% if articles %}
-        <!-- Article Grid -->
-        <div class="notion-block">
-            <h2>Latest Articles</h2>
-            <div class="notion-grid-single">
-                {% for article in articles %}
-                    <div class="notion-card" data-categories="{% for category in article.categories.all %}{{ category.name }} {% endfor %}">
-                        <h3>{{ article.title }}</h3>
-                        {% if article.description %}
-                            <p class="article-description">{{ article.description }}</p>
-                        {% endif %}
-                        <div class="notion-metadata">
-                            <span><i class="ri-calendar-line"></i> {{ article.created_at|date:"F j, Y" }}</span>
-                            {% if article.categories.exists %}
-                                <span class="notion-tag">{% for category in article.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+        <div class="row">
+            <!-- Articles Column -->
+            <div class="col-lg-10 col-md-9">
+                <div class="notion-block">
+                    <h2>Articles</h2>
+                    <div class="notion-grid-single" id="articles-container">
+                        {% for article in articles %}
+                            <div class="notion-card article-card" data-categories="{% for category in article.categories.all %}{{ category.name }} {% endfor %}" data-year="{{ article.created_at.year }}">
+                                <h3>{{ article.title }}</h3>
+                                {% if article.description %}
+                                    <p class="article-description">{{ article.description }}</p>
+                                {% endif %}
+                                <div class="notion-metadata">
+                                    <span><i class="ri-calendar-line"></i> {{ article.created_at|date:"F j, Y" }}</span>
+                                    {% if article.categories.exists %}
+                                        <span class="notion-tag">{% for category in article.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="notion-buttons">
+                                    <a href="{% url 'article_detail' article.slug %}" class="notion-button">
+                                        <i class="ri-article-line"></i>
+                                        <span>Read Article</span>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Year Filter Sidebar -->
+            <div class="col-lg-2 col-md-3">
+                {% if available_years %}
+                    <!-- Spacer to align with first article card -->
+                    <div class="year-filter-spacer"></div>
+                    <div class="notion-block">
+                        <div class="year-slider-compact">
+                            <div class="year-slider-track-compact">
+                                {% for year in available_years %}
+                                    <div class="year-item-compact {% if selected_year == year|stringformat:'s' %}active{% endif %}" data-year="{{ year }}">
+                                        <div class="year-circle-compact"></div>
+                                        <div class="year-label-compact">{{ year }}</div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if selected_year %}
+                                <button class="year-clear-btn-compact notion-button">
+                                    Clear
+                                </button>
                             {% endif %}
                         </div>
-                        <div class="notion-buttons">
-                            <a href="{% url 'article_detail' article.slug %}" class="notion-button">
-                                <i class="ri-article-line"></i>
-                                <span>Read Article</span>
-                            </a>
-                        </div>
                     </div>
-                {% endfor %}
+                {% endif %}
             </div>
         </div>
     {% else %}
@@ -67,7 +96,41 @@
 document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('[data-filter]');
     const articleCards = document.querySelectorAll('.notion-card[data-categories]');
+    const yearItems = document.querySelectorAll('.year-item-compact');
+    const yearClearBtn = document.querySelector('.year-clear-btn-compact');
+    
+    let currentCategoryFilter = 'all';
+    let currentYearFilter = null;
+    
+    // Initialize current filters from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedYear = urlParams.get('year');
+    if (selectedYear) {
+        currentYearFilter = selectedYear;
+    }
+    
+    function filterArticles() {
+        articleCards.forEach(card => {
+            const categories = card.getAttribute('data-categories').split(' ');
+            const year = card.getAttribute('data-year');
+            
+            let showCard = true;
+            
+            // Category filter
+            if (currentCategoryFilter !== 'all' && !categories.includes(currentCategoryFilter)) {
+                showCard = false;
+            }
+            
+            // Year filter
+            if (currentYearFilter && year !== currentYearFilter) {
+                showCard = false;
+            }
+            
+            card.style.display = showCard ? '' : 'none';
+        });
+    }
 
+    // Category filter buttons
     filterButtons.forEach(button => {
         button.addEventListener('click', (e) => {
             // Only prevent default if it's not a category link
@@ -78,17 +141,46 @@ document.addEventListener('DOMContentLoaded', function() {
             filterButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
 
-            const filter = button.getAttribute('data-filter');
-            articleCards.forEach(card => {
-                const categories = card.getAttribute('data-categories').split(' ');
-                if (filter === 'all' || categories.includes(filter)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            currentCategoryFilter = button.getAttribute('data-filter');
+            filterArticles();
         });
     });
+    
+    // Year filter items
+    yearItems.forEach(yearItem => {
+        yearItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Toggle year selection
+            const year = yearItem.getAttribute('data-year');
+            
+            if (yearItem.classList.contains('active')) {
+                // Deselect current year
+                currentYearFilter = null;
+                yearItem.classList.remove('active');
+                if (yearClearBtn) yearClearBtn.style.display = 'none';
+            } else {
+                // Select new year
+                yearItems.forEach(item => item.classList.remove('active'));
+                yearItem.classList.add('active');
+                currentYearFilter = year;
+                if (yearClearBtn) yearClearBtn.style.display = 'block';
+            }
+            
+            filterArticles();
+        });
+    });
+    
+    // Clear year filter button
+    if (yearClearBtn) {
+        yearClearBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            currentYearFilter = null;
+            yearItems.forEach(item => item.classList.remove('active'));
+            yearClearBtn.style.display = 'none';
+            filterArticles();
+        });
+    }
 });
 </script>
 
@@ -101,9 +193,24 @@ document.addEventListener('DOMContentLoaded', function() {
     opacity: 0.9;
 }
 
+/* Add spacing between article cards */
+.notion-grid-single {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px !important; /* Increased gap between cards */
+    margin: 32px 0;
+}
+
 .notion-grid-single .notion-card {
     padding: 24px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0; /* Remove margin since we use gap */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.notion-grid-single .notion-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .notion-grid-single .notion-card h3 {
@@ -126,6 +233,103 @@ document.addEventListener('DOMContentLoaded', function() {
     gap: 6px;
 }
 
+.year-filter-spacer {
+    height: calc(2em + 32px + 16px); /* h2 font-size + margin + padding to match Articles column */
+}
+
+.year-slider-compact {
+    position: sticky;
+    top: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    padding: 16px 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 120px;
+    margin-top: 0px; /* Reset margin, we'll align using the parent container */
+}
+
+.year-slider-track-compact {
+    position: relative;
+    padding: 8px 0;
+}
+
+.year-slider-track-compact::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.year-item-compact {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 4px;
+    border-radius: 6px;
+}
+
+.year-item-compact:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.year-item-compact.active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.year-circle-compact {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    margin-right: 10px;
+    transition: all 0.2s ease;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+.year-item-compact.active .year-circle-compact {
+    background: #fff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    border-color: #fff;
+}
+
+.year-label-compact {
+    font-size: 0.85em;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.year-item-compact.active .year-label-compact {
+    color: #fff;
+    font-weight: 600;
+}
+
+.year-clear-btn-compact {
+    margin-top: 12px;
+    width: 100%;
+    font-size: 0.75em;
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+}
+
+.year-clear-btn-compact:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
 @media (max-width: 768px) {
     .notion-grid-single .notion-card {
         padding: 20px;
@@ -137,6 +341,63 @@ document.addEventListener('DOMContentLoaded', function() {
     
     .article-description {
         font-size: 0.9em;
+    }
+    
+    .notion-grid-single {
+        gap: 24px !important;
+    }
+    
+    .year-filter-spacer {
+        display: none; /* Hide spacer on mobile */
+    }
+    
+    .year-slider-compact {
+        position: static;
+        margin-top: 20px;
+        max-width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 12px;
+    }
+    
+    .year-slider-track-compact {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 4px 0;
+        justify-content: center;
+    }
+    
+    .year-slider-track-compact::before {
+        display: none;
+    }
+    
+    .year-item-compact {
+        margin: 0;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 6px 12px;
+        flex-shrink: 0;
+    }
+    
+    .year-circle-compact {
+        display: none;
+    }
+    
+    .year-clear-btn-compact {
+        margin-top: 8px;
+        font-size: 0.8em;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .year-filter-spacer {
+        height: calc(1.8em + 28px + 14px); /* Adjust for medium screens */
+    }
+}
+
+@media (min-width: 1201px) {
+    .year-filter-spacer {
+        height: calc(2em + 32px + 16px); /* Perfect alignment for large screens */
     }
 }
 </style>

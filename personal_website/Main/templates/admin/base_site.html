@@ -3,6 +3,10 @@
 
 {% block title %}{{ title }} | {{ site_title|default:_('Shawn\'s Admin') }}{% endblock %}
 
+{% block favicon %}
+<link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+{% endblock %}
+
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/custom_admin.css' %}">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">

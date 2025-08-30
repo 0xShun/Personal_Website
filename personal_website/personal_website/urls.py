@@ -22,12 +22,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 from django.urls import re_path
+from django.views.generic import RedirectView
 
 # Custom error handlers
 handler404 = 'Main.views.custom_404'
 handler500 = 'Main.views.custom_500'
 
 urlpatterns = [
+    # Favicon
+    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico', permanent=True)),
     # Use the custom admin site
     path('4dm1n/', custom_admin_site.urls),
     path('', include('Main.urls'), name='home'),

@@ -13,19 +13,20 @@
   <div class="admin-menu-section">
     <h3><i class="fas fa-file-alt"></i> {% trans "Content Management" %}</h3>
     <ul class="admin-menu-items">
-      <li><a href="{% url 'admin:Main_article_changelist' %}"><i class="fas fa-newspaper"></i> {% trans "Articles" %}</a></li>
-      <li><a href="{% url 'admin:Main_project_changelist' %}"><i class="fas fa-project-diagram"></i> {% trans "Projects" %}</a></li>
-      <li><a href="{% url 'admin:Main_research_changelist' %}"><i class="fas fa-flask"></i> {% trans "Research" %}</a></li>
-      <li><a href="{% url 'admin:Main_carouselimage_changelist' %}"><i class="fas fa-images"></i> {% trans "Carousel Images" %}</a></li>
+      <li><a href="{% url 'customadmin:Main_article_changelist' %}"><i class="fas fa-newspaper"></i> {% trans "Articles" %}</a></li>
+      <li><a href="{% url 'customadmin:Main_project_changelist' %}"><i class="fas fa-project-diagram"></i> {% trans "Projects" %}</a></li>
+      <li><a href="{% url 'customadmin:Main_research_changelist' %}"><i class="fas fa-flask"></i> {% trans "Research" %}</a></li>
+      <li><a href="{% url 'customadmin:Main_carouselimage_changelist' %}"><i class="fas fa-images"></i> {% trans "Carousel Images" %}</a></li>
+      <li><a href="{% url 'customadmin:Main_comment_changelist' %}"><i class="fas fa-comments"></i> {% trans "Comments" %}</a></li>
     </ul>
   </div>
 
   <div class="admin-menu-section">
     <h3><i class="fas fa-tags"></i> {% trans "Categories" %}</h3>
     <ul class="admin-menu-items">
-      <li><a href="{% url 'admin:Main_articlecategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Article Categories" %}</a></li>
-      <li><a href="{% url 'admin:Main_projectcategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Project Categories" %}</a></li>
-      <li><a href="{% url 'admin:Main_researchcategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Research Categories" %}</a></li>
+      <li><a href="{% url 'customadmin:Main_articlecategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Article Categories" %}</a></li>
+      <li><a href="{% url 'customadmin:Main_projectcategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Project Categories" %}</a></li>
+      <li><a href="{% url 'customadmin:Main_researchcategory_changelist' %}"><i class="fas fa-tag"></i> {% trans "Research Categories" %}</a></li>
     </ul>
   </div>
 

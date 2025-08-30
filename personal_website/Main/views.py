@@ -283,12 +283,41 @@ def research_detail(request, pk):
 
 def articles(request):
     category_filter = request.GET.get('category')
+    year_filter = request.GET.get('year')
+    
+    # Base queryset
+    articles = Article.objects.all()
+    
+    # Apply category filter
     if category_filter:
-        articles = Article.objects.filter(categories__id=category_filter)
-    else:
-        articles = Article.objects.all()
+        articles = articles.filter(categories__id=category_filter)
+    
+    # Apply year filter
+    if year_filter:
+        articles = articles.filter(created_at__year=year_filter)
+    
+    # Get all categories
     categories = ArticleCategory.objects.all()
-    return render(request, 'articles.html', {'articles': articles, 'categories': categories, 'selected_category': category_filter})
+    
+    # Get available years from articles (ordered newest first)
+    # Using a more compatible approach for getting years
+    all_articles = Article.objects.all().order_by('-created_at')
+    available_years = []
+    seen_years = set()
+    
+    for article in all_articles:
+        year = article.created_at.year
+        if year not in seen_years:
+            available_years.append(year)
+            seen_years.add(year)
+    
+    return render(request, 'articles.html', {
+        'articles': articles, 
+        'categories': categories, 
+        'selected_category': category_filter,
+        'available_years': available_years,
+        'selected_year': year_filter
+    })
 
 def article_detail(request, slug):
     article = get_object_or_404(Article, slug=slug)

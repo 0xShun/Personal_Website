@@ -20,7 +20,7 @@ class TagFilter(SimpleListFilter):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'status', 'created_at', 'updated_at')
+    list_display = ('title', 'get_comment_count', 'status', 'created_at', 'updated_at')
     list_filter = ('status', 'categories', 'created_at')
     search_fields = ('title', 'description')
     filter_horizontal = ('categories',)
@@ -33,6 +33,15 @@ class ProjectAdmin(admin.ModelAdmin):
             'fields': ('technologies', 'github_link')
         }),
     )
+    
+    def get_comment_count(self, obj):
+        """Show number of approved and total comments for this project"""
+        total_comments = Comment.objects.filter(content_type='project', object_id=obj.id).count()
+        approved_comments = Comment.objects.filter(content_type='project', object_id=obj.id, is_approved=True).count()
+        if total_comments > 0:
+            return f"{approved_comments}/{total_comments} approved"
+        return "No comments"
+    get_comment_count.short_description = "Comments"
 
 class ArticleAdminForm(forms.ModelForm):
     created_at = forms.DateTimeField(
@@ -72,12 +81,12 @@ class ArticleAdminForm(forms.ModelForm):
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
-    list_display = ('title', 'created_at', 'updated_at')
+    list_display = ('title', 'get_comment_count', 'created_at', 'updated_at')
     list_display_links = ('title',)
     search_fields = ('title', 'description')
     list_filter = ('created_at', TagFilter)
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('content_html', 'content_md')
+    readonly_fields = ('content_html', 'content_md', 'get_comments_link')
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Article Information', {
@@ -91,12 +100,52 @@ class ArticleAdmin(admin.ModelAdmin):
             'fields': ('markdown_file',),
             'description': 'Upload a Markdown (.md) file containing your article content.'
         }),
+        ('Comments', {
+            'fields': ('get_comments_link',),
+            'description': 'View comment information for this article. Use the Comments section in the admin menu to manage comments.'
+        }),
         ('Preview', {
             'fields': ('content_md', 'content_html'),
             'classes': ('collapse',),
             'description': 'Preview of the processed content (read-only)'
         })
     )
+    
+    def get_comment_count(self, obj):
+        """Show number of approved and total comments for this article"""
+        total_comments = Comment.objects.filter(content_type='article', object_id=obj.id).count()
+        approved_comments = Comment.objects.filter(content_type='article', object_id=obj.id, is_approved=True).count()
+        if total_comments > 0:
+            return f"{approved_comments}/{total_comments} approved"
+        return "No comments"
+    get_comment_count.short_description = "Comments"
+    
+    def get_comments_link(self, obj):
+        """Provide a link to view comments for this article"""
+        from django.urls import reverse
+        from django.utils.html import format_html
+        
+        try:
+            url = reverse('customadmin:Main_comment_changelist')
+            link = f"{url}?content_type__exact=article&object_id__exact={obj.id}"
+            count = Comment.objects.filter(content_type='article', object_id=obj.id).count()
+            approved_count = Comment.objects.filter(content_type='article', object_id=obj.id, is_approved=True).count()
+            
+            if count > 0:
+                return format_html('<a href="{}" target="_blank">View {} comment{} ({}/{} approved)</a>', 
+                                 link, count, 's' if count != 1 else '', approved_count, count)
+            else:
+                return "No comments yet"
+        except:
+            # Fallback to simple display if URL fails
+            count = Comment.objects.filter(content_type='article', object_id=obj.id).count()
+            approved_count = Comment.objects.filter(content_type='article', object_id=obj.id, is_approved=True).count()
+            
+            if count > 0:
+                return f"{approved_count}/{count} comments (approved/total). Go to Comments section in admin to manage."
+            else:
+                return "No comments yet"
+    get_comments_link.short_description = "Article Comments"
 
     def save_model(self, request, obj, form, change):
         # Handle file upload and save
@@ -162,7 +211,7 @@ class ResearchAdminForm(forms.ModelForm):
 @admin.register(Research)
 class ResearchAdmin(admin.ModelAdmin):
     form = ResearchAdminForm
-    list_display = ('title', 'status', 'published_date', 'created_at', 'updated_at')
+    list_display = ('title', 'get_comment_count', 'status', 'published_date', 'created_at', 'updated_at')
     list_filter = ('status', 'categories', 'created_at', 'published_date')
     search_fields = ('title', 'abstract')
     filter_horizontal = ('categories',)
@@ -181,6 +230,15 @@ class ResearchAdmin(admin.ModelAdmin):
             'description': 'Choose whether to upload a PDF file or provide an external link'
         }),
     )
+    
+    def get_comment_count(self, obj):
+        """Show number of approved and total comments for this research"""
+        total_comments = Comment.objects.filter(content_type='research', object_id=obj.id).count()
+        approved_comments = Comment.objects.filter(content_type='research', object_id=obj.id, is_approved=True).count()
+        if total_comments > 0:
+            return f"{approved_comments}/{total_comments} approved"
+        return "No comments"
+    get_comment_count.short_description = "Comments"
 
     class Media:
         js = ('admin/js/research_admin.js',)
@@ -211,18 +269,51 @@ class CarouselImageAdmin(admin.ModelAdmin):
     image_preview.allow_tags = True
     image_preview.short_description = "Preview"
 
-@admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'content_type', 'object_id', 'created_at', 'is_approved')
+    list_display = ('name', 'get_content_object', 'content_preview', 'created_at', 'is_approved')
     list_filter = ('content_type', 'is_approved', 'created_at')
     search_fields = ('name', 'email', 'content')
-    readonly_fields = ('ip_address',)
+    readonly_fields = ('ip_address', 'created_at')
     actions = ['approve_comments', 'reject_comments']
+    list_per_page = 25
+    date_hierarchy = 'created_at'
+    
+    def get_content_object(self, obj):
+        """Show which article/project/research this comment belongs to"""
+        if obj.content_type == 'article':
+            try:
+                article = Article.objects.get(id=obj.object_id)
+                return f"Article: {article.title}"
+            except Article.DoesNotExist:
+                return f"Article: (Deleted - ID: {obj.object_id})"
+        elif obj.content_type == 'project':
+            try:
+                project = Project.objects.get(id=obj.object_id)
+                return f"Project: {project.title}"
+            except Project.DoesNotExist:
+                return f"Project: (Deleted - ID: {obj.object_id})"
+        elif obj.content_type == 'research':
+            try:
+                research = Research.objects.get(id=obj.object_id)
+                return f"Research: {research.title}"
+            except Research.DoesNotExist:
+                return f"Research: (Deleted - ID: {obj.object_id})"
+        return f"{obj.content_type.title()}: ID {obj.object_id}"
+    get_content_object.short_description = "Content Object"
+    get_content_object.admin_order_field = 'content_type'
+    
+    def content_preview(self, obj):
+        """Show a preview of the comment content"""
+        return obj.content[:100] + "..." if len(obj.content) > 100 else obj.content
+    content_preview.short_description = "Comment Preview"
     
     def approve_comments(self, request, queryset):
-        queryset.update(is_approved=True)
+        updated = queryset.update(is_approved=True)
+        self.message_user(request, f"{updated} comments were successfully approved.")
     approve_comments.short_description = "Approve selected comments"
     
     def reject_comments(self, request, queryset):
+        count = queryset.count()
         queryset.delete()
+        self.message_user(request, f"{count} comments were successfully deleted.")
     reject_comments.short_description = "Delete selected comments"
