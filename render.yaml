@@ -2,7 +2,7 @@ services:
     - type: web
       name: my-django-app
       runtime: python
-      buildCommand: "pip install -r requirements.txt"
+      buildCommand: "chmod +x build.sh && ./build.sh"
       startCommand: "gunicorn personal_website.wsgi:application"
       envVars:
           - key: DATABASE_URL
@@ -13,3 +13,9 @@ services:
             generateValue: true
           - key: DEBUG
             value: "False"
+          - key: DJANGO_SUPERUSER_USERNAME
+            value: "shun_admin"
+          - key: DJANGO_SUPERUSER_EMAIL
+            value: "shawnmichael.sudaria04@gmail.com"
+          - key: DJANGO_SUPERUSER_PASSWORD
+            value: "N3tw0rkd0wn14!"

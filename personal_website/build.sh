@@ -16,4 +16,7 @@ python test_db.py || echo "Database connection test failed, but continuing build
 python manage.py collectstatic --noinput
 python manage.py migrate
 
+# Create superuser from environment variables
+python manage.py createadmin
+
 echo "Build completed successfully!"

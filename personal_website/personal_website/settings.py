@@ -224,3 +224,8 @@ else:
 
 # Contact email
 CONTACT_EMAIL = env_vars.get('CONTACT_EMAIL', 'shawnmichael.sudaria04@gmail.com')
+
+# Admin user configuration
+DJANGO_SUPERUSER_USERNAME = env_vars.get('DJANGO_SUPERUSER_USERNAME', 'shun_admin')
+DJANGO_SUPERUSER_EMAIL = env_vars.get('DJANGO_SUPERUSER_EMAIL', 'shawnmichael.sudaria04@gmail.com')
+DJANGO_SUPERUSER_PASSWORD = env_vars.get('DJANGO_SUPERUSER_PASSWORD', 'N3tw0rkd0wn14!')
