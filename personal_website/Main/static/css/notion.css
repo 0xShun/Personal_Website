@@ -327,6 +327,15 @@ h3 {
     gap: 32px;
     margin: 32px 0;
 }
+
+/* Single Column Grid for Articles */
+.notion-grid-single {
+    display: grid;
+    grid-template-columns: 1fr !important;
+    gap: 24px;
+    margin: 32px 0;
+}
+
 .notion-card {
     min-width: 320px;
 }
@@ -334,6 +343,10 @@ h3 {
     .notion-grid {
         grid-template-columns: 1fr !important;
         gap: 20px;
+        margin: 20px 0;
+    }
+    .notion-grid-single {
+        gap: 16px;
         margin: 20px 0;
     }
     .notion-card {

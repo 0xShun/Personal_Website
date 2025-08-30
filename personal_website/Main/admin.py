@@ -74,14 +74,14 @@ class ArticleAdmin(admin.ModelAdmin):
     form = ArticleAdminForm
     list_display = ('title', 'created_at', 'updated_at')
     list_display_links = ('title',)
-    search_fields = ('title',)
+    search_fields = ('title', 'description')
     list_filter = ('created_at', TagFilter)
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ('content_html', 'content_md')
     date_hierarchy = 'created_at'
     fieldsets = (
         ('Article Information', {
-            'fields': ('title', 'slug', 'categories')
+            'fields': ('title', 'description', 'slug', 'categories')
         }),
         ('Publishing Dates', {
             'fields': ('created_at', 'updated_at'),

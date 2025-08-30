@@ -48,6 +48,7 @@ class Project(models.Model):
 class Article(models.Model):
 
     title = models.CharField(max_length=200)
+    description = models.TextField(max_length=500, default="", help_text="Brief description to show in article listing (max 500 characters)")
     slug = models.SlugField(unique=True, blank=True)
     categories = models.ManyToManyField(ArticleCategory, blank=True)
     markdown_file = models.FileField(
