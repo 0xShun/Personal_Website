@@ -126,12 +126,19 @@ if USE_SQLITE:
     }
 else:
     # For PostgreSQL or other database systems via DATABASE_URL
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=env_vars.get('DATABASE_URL'),
-            conn_max_age=600
-        )
-    }
+    db_config = dj_database_url.config(
+        default=env_vars.get('DATABASE_URL'),
+        conn_max_age=600
+    )
+    
+    # Add special configuration for Neon PostgreSQL
+    if 'neon' in env_vars.get('DATABASE_URL', ''):
+        # Add Neon-specific options
+        db_config['OPTIONS'] = {
+            'sslmode': 'require',
+        }
+        
+    DATABASES = {'default': db_config}
 
 
 # Password validation
@@ -181,6 +188,13 @@ LOGGING = {
             'stream': sys.stdout,
         },
     },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
     'root': {
         'handlers': ['console'],
         'level': 'ERROR',
@@ -195,13 +209,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, env_vars.get('MEDIA_ROOT', 'media'))
 USE_CLOUDINARY = env_vars.get('USE_CLOUDINARY', 'True').lower() == 'true'
 
 if USE_CLOUDINARY:
-    # Cloudinary settings for media storage
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': env_vars.get('CLOUDINARY_CLOUD_NAME'),
         'API_KEY': env_vars.get('CLOUDINARY_API_KEY'),
         'API_SECRET': env_vars.get('CLOUDINARY_API_SECRET'),
     }
+else:
+    # Configure local media storage
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    # Make sure media files are served in production
+    if not DEBUG:
+        MEDIA_ROOT = '/opt/render/project/src/media'
 
 # Contact email
 CONTACT_EMAIL = env_vars.get('CONTACT_EMAIL', 'shawnmichael.sudaria04@gmail.com')
