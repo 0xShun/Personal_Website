@@ -62,6 +62,10 @@
                 <i class="ri-article-line"></i>
                 <span>Articles</span>
             </a>
+            <a href="{% url 'gallery' %}" class="notion-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">
+                <i class="ri-gallery-line"></i>
+                <span>Gallery</span>
+            </a>
             <a href="{% url 'contact' %}" class="notion-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
                 <i class="ri-mail-line"></i>
                 <span>Email</span>

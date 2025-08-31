@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage, Comment, Accolade
+from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage, Comment, Accolade, GalleryImage
 from django.contrib.admin import SimpleListFilter
 from Articles.models import Tag
 from django import forms
 from django.contrib.auth.models import User, Group
+from django.utils.html import format_html
 from .admin_site import custom_admin_site
 
 class TagFilter(SimpleListFilter):
@@ -289,6 +290,36 @@ class AccoladeAdmin(admin.ModelAdmin):
             'description': 'Choose whether to display this accolade on the home page.'
         }),
     )
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related()
+
+class GalleryImageAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'date_taken', 'location', 'is_featured', 'order', 'image_preview')
+    list_filter = ('category', 'is_featured', 'date_taken', 'created_at')
+    search_fields = ('title', 'description', 'location')
+    list_editable = ('is_featured', 'order', 'category')
+    date_hierarchy = 'created_at'
+    ordering = ['order', '-created_at']
+    
+    fieldsets = (
+        ('Image Details', {
+            'fields': ('title', 'description', 'image')
+        }),
+        ('Metadata', {
+            'fields': ('date_taken', 'location', 'category')
+        }),
+        ('Display Options', {
+            'fields': ('is_featured', 'order'),
+            'description': 'Control display order and visibility in the gallery.'
+        }),
+    )
+    
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;" />', obj.image.url)
+        return "No Image"
+    image_preview.short_description = "Preview"
     
     def get_queryset(self, request):
         return super().get_queryset(request).select_related()

@@ -211,3 +211,37 @@ class Accolade(models.Model):
     def __str__(self):
         return self.title
 
+
+class GalleryImage(models.Model):
+    title = models.CharField(max_length=200, help_text="Title or caption for the image")
+    description = models.TextField(blank=True, help_text="Optional description of the image")
+    image = models.ImageField(upload_to='gallery/', help_text="Upload the gallery image")
+    date_taken = models.DateField(blank=True, null=True, help_text="Date when the photo was taken (optional)")
+    location = models.CharField(max_length=200, blank=True, help_text="Location where the photo was taken (optional)")
+    category = models.CharField(
+        max_length=50, 
+        choices=[
+            ('personal', 'Personal'),
+            ('travel', 'Travel'),
+            ('events', 'Events'),
+            ('nature', 'Nature'),
+            ('urban', 'Urban'),
+            ('people', 'People'),
+            ('other', 'Other'),
+        ],
+        default='other',
+        help_text="Category of the image"
+    )
+    is_featured = models.BooleanField(default=True, help_text="Display this image in the gallery")
+    order = models.PositiveIntegerField(default=0, help_text="Order of display (lower numbers appear first)")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['order', '-created_at']
+        verbose_name = "Gallery Image"
+        verbose_name_plural = "Gallery Images"
+    
+    def __str__(self):
+        return self.title
+

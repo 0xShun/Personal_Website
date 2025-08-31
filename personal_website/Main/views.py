@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.contrib.contenttypes.models import ContentType
-from .models import Project, Research, Article, ArticleCategory, ProjectCategory, ResearchCategory, CarouselImage, Comment, Accolade
+from .models import Project, Research, Article, ArticleCategory, ProjectCategory, ResearchCategory, CarouselImage, Comment, Accolade, GalleryImage
 from .forms import CommentForm
 import os
 from django.conf import settings
@@ -409,6 +409,24 @@ def post_comment(request, content_type, object_id):
         messages.error(request, error_message.strip())
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+def gallery(request):
+    """
+    View function for the gallery page.
+    """
+    # Get all featured gallery images ordered by their display order
+    gallery_images = GalleryImage.objects.filter(is_featured=True).order_by('order', '-created_at')
+    
+    # Get available categories for filtering (ensure no duplicates)
+    categories = list(set(GalleryImage.objects.filter(is_featured=True).values_list('category', flat=True)))
+    categories.sort()  # Sort alphabetically
+    
+    context = {
+        'title': 'Gallery',
+        'gallery_images': gallery_images,
+        'categories': categories,
+    }
+    return render(request, 'gallery.html', context)
 
 # Custom error handlers
 def custom_404(request, exception):

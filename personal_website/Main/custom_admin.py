@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import User, Group
-from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage, Comment, Accolade
+from .models import Project, Article, Research, ProjectCategory, ArticleCategory, ResearchCategory, CarouselImage, Comment, Accolade, GalleryImage
 from django.template.response import TemplateResponse
 
 # Import admin classes from admin.py
@@ -16,7 +16,8 @@ from .admin import (
     ResearchCategoryAdmin, 
     CarouselImageAdmin,
     CommentAdmin,
-    AccoladeAdmin
+    AccoladeAdmin,
+    GalleryImageAdmin
 )
 
 class CustomAdminSite(admin.AdminSite):
@@ -73,3 +74,4 @@ custom_admin_site.register(ResearchCategory, ResearchCategoryAdmin)
 custom_admin_site.register(CarouselImage, CarouselImageAdmin)
 custom_admin_site.register(Comment, CommentAdmin)
 custom_admin_site.register(Accolade, AccoladeAdmin)
+custom_admin_site.register(GalleryImage, GalleryImageAdmin)
