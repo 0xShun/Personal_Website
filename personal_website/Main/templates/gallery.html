@@ -93,12 +93,13 @@
     }
     
     .modal-content {
-        position: relative;
-        margin: auto;
-        display: block;
-        max-width: 90%;
-        max-height: 90%;
-        margin-top: 5%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 90vw;
+        max-height: 90vh;
+        object-fit: contain;
         border-radius: 8px;
     }
     
