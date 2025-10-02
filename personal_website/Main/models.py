@@ -3,6 +3,7 @@ from django.utils import timezone
 import markdown
 from django.utils.text import slugify
 from django.core.files.storage import default_storage
+from cloudinary_storage.storage import RawMediaCloudinaryStorage
 import os   
 
 class ProjectCategory(models.Model):
@@ -53,6 +54,7 @@ class Article(models.Model):
     categories = models.ManyToManyField(ArticleCategory, blank=True)
     markdown_file = models.FileField(
         upload_to='articles/markdown/',
+        storage=RawMediaCloudinaryStorage(),  # Store markdown in Cloudinary as raw files
         help_text="Upload a Markdown (.md) file",
         null=True,
         blank=True
@@ -77,18 +79,36 @@ class Article(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         
-        # Process markdown file if it has changed
+        # Process markdown file only when a new file is uploaded or changed
+        process_markdown = False
         if self.markdown_file:
+            if not self.pk:
+                process_markdown = True
+            else:
+                try:
+                    old = Article.objects.get(pk=self.pk)
+                    old_name = getattr(old.markdown_file, 'name', None)
+                    new_name = getattr(self.markdown_file, 'name', None)
+                    process_markdown = old_name != new_name
+                except Article.DoesNotExist:
+                    process_markdown = True
+
+        if process_markdown and self.markdown_file:
             try:
-                # Read the markdown file content
-                content = self.markdown_file.read().decode('utf-8')
+                raw = self.markdown_file.read()
+                content = raw if isinstance(raw, str) else raw.decode('utf-8')
                 self.content_md = content
-                
+
                 # Convert markdown to HTML
                 self.content_html = markdown.markdown(
                     content,
                     extensions=['extra', 'codehilite', 'toc']
                 )
+                # Reset file pointer so storage can save the file content
+                try:
+                    self.markdown_file.seek(0)
+                except Exception:
+                    pass
             except Exception as e:
                 # If there's an error, set content to error message
                 self.content_md = f"Error reading markdown file: {str(e)}"
@@ -97,10 +117,12 @@ class Article(models.Model):
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        # Delete the markdown file when the article is deleted
+        # Delete the markdown file via the storage backend (Cloudinary) on delete
         if self.markdown_file:
-            if os.path.isfile(self.markdown_file.path):
-                os.remove(self.markdown_file.path)
+            try:
+                self.markdown_file.delete(save=False)
+            except Exception:
+                pass
         super().delete(*args, **kwargs)
 
     def __str__(self):
